@@ -13,10 +13,17 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '2h' },
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const secret = configService.get<string>('JWT_SECRET');
+        if (!secret) {
+          console.error('No JWT secret found.');
+        }
+
+        return {
+          secret: secret,
+          signOptions: { expiresIn: '2h' },
+        };
+      },
     }),
   ],
   providers: [AuthService, JwtStrategy],

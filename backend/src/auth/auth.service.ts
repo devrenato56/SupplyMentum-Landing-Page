@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -8,6 +9,7 @@ export class AuthService {
   constructor(
     private supabaseService: SupabaseService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async login(username: string, password: string) {
@@ -30,7 +32,9 @@ export class AuthService {
 
     const payload = { sub: admin.id, username: admin.username, role: 'admin' };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      }),
     };
   }
 }
