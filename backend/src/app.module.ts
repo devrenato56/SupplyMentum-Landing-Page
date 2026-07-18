@@ -11,8 +11,8 @@ import { AdminController } from './admin/admin.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    SupabaseModule,
     AuthModule,
+    SupabaseModule,
     JwtModule,
   ],
   controllers: [AppController, AdminController],
