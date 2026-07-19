@@ -23,11 +23,7 @@ export class ApplicationDto {
 
   @IsString()
   @IsNotEmpty()
-  readonly university: string;
-
-  @IsString()
-  @IsNotEmpty()
-  readonly university_semester: string;
+  readonly university_semester: number;
 
   @IsNumber()
   @IsNotEmpty()

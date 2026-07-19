@@ -8,7 +8,11 @@ export class AdminService {
   async getApplicants() {
     const supabase = this.supabaseService.getClient();
 
-    const { data } = await supabase.from('applicants').select('*');
+    const { data } = await supabase
+      .from('applicants')
+      .select(
+        'first_name, last_name, email, phone, career, university_semester, first_choice_area_id, second_choice_area_id, application_reason, created_at',
+      );
 
     return data;
   }
