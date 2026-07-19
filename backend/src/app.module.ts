@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AdminController } from './admin/admin.controller';
 import { ApplicationController } from './application/application.controller';
 import { ApplicationService } from './application/application.service';
+import { AdminService } from './admin/admin.service';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { ApplicationService } from './application/application.service';
     JwtModule,
   ],
   controllers: [AppController, AdminController, ApplicationController],
-  providers: [AppService, AuthService, ApplicationService],
+  providers: [AppService, AuthService, ApplicationService, AdminService],
 })
 export class AppModule {}

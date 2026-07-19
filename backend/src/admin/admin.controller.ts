@@ -10,10 +10,14 @@ import {
 import { AuthService } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import express from 'express';
+import { AdminService } from './admin.service';
 
-@Controller('admin')
+@Controller('/api/admin')
 export class AdminController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private adminService: AdminService,
+  ) {}
 
   @Post('login')
   async login(
@@ -37,5 +41,11 @@ export class AdminController {
     return {
       message: `Welcome`,
     };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('applicants')
+  getApplicants(@Request() req) {
+    return this.adminService.getApplicants();
   }
 }
