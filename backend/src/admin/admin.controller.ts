@@ -23,7 +23,7 @@ export class AdminController {
     const result = await this.authService.login(body.username, body.password);
     response.cookie('admin_token', result.access_token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 2 * 60 * 60 * 1000,
     });
