@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AdminController } from './admin/admin.controller';
 import { ApplicationController } from './application/application.controller';
 import { ApplicationService } from './application/application.service';
+import { CmsModule } from './cms/cms.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ApplicationService } from './application/application.service';
     AuthModule,
     SupabaseModule,
     JwtModule,
+    CmsModule,
   ],
   controllers: [AppController, AdminController, ApplicationController],
   providers: [AppService, AuthService, ApplicationService],

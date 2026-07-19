@@ -31,6 +31,26 @@
 $ npm install
 ```
 
+## CMS foundation
+
+This backend now includes a minimal CMS layer under `/api/cms` and `/admin/cms`.
+
+In Supabase, create these resources first:
+
+1. A `cms_sections` table with at least these columns:
+  - `section_key` text primary key
+  - `title` text null
+  - `payload` jsonb not null default `'{}'::jsonb`
+  - `updated_at` timestamptz null default now()
+2. A public storage bucket for images, for example `cms-assets`.
+3. A backend service key with permission to read/write the table and bucket. The current backend reads `SUPABASE_KEY`, so you can point that variable to the service role key.
+
+Recommended workflow:
+
+- Upload images to the Supabase bucket.
+- Store the public file URL or path inside the `payload` JSON of each CMS section.
+- Use `PUT /admin/cms/:sectionKey` to update a section without touching frontend code.
+
 ## Compile and run the project
 
 ```bash
