@@ -24,6 +24,7 @@
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -36,6 +37,27 @@
 }
 
 .animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Conveyor belt animations */
+@keyframes conveyor-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-conveyor {
+  display: flex;
+  width: max-content;
+  animation: conveyor-left 40s linear infinite;
+}
+
+.animate-conveyor:hover {
   animation-play-state: paused;
 }
 
@@ -53,4 +75,37 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* ── Conveyor belt scrollbar ────────────────────────────────────
+   Thumb: brand red (#ED1C24) semi-transparent → fully opaque on hover
+   Track: near-invisible dark strip matching page background
+────────────────────────────────────────────────────────────── */
+.conveyor-scrollbar {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: rgba(237, 28, 36, 0.55) rgba(9, 9, 11, 0.5);
+  /* Firefox thumb / track */
+}
+
+.conveyor-scrollbar::-webkit-scrollbar {
+  height: 5px;
+}
+
+.conveyor-scrollbar::-webkit-scrollbar-track {
+  background: rgba(9, 9, 11, 0.5);
+  /* #09090B @ 50% — matches page bg */
+  border-radius: 9999px;
+}
+
+.conveyor-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(237, 28, 36, 0.55);
+  /* #ED1C24 brand red semi-transparent */
+  border-radius: 9999px;
+  transition: background 0.25s ease;
+}
+
+.conveyor-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ED1C24;
+  /* full brand red on hover */
 }
