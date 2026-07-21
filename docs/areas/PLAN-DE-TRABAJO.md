@@ -1,14 +1,14 @@
 # Plan de Trabajo - Sección Áreas
 
 ## Fase 1: Preparación y Estructura de Datos
-- [ ] Inicializar la estructura de documentación en docs/areas/.
-- [ ] Extraer el contenido del HTML en crudo (nombres, descripciones, requisitos y perfiles de LinkedIn de directores) y estructurarlo en un archivo areasData.ts para renderizado dinámico.
+- [x] Inicializar la estructura de documentación en docs/areas/.
+- [x] Extraer el contenido del HTML en crudo (nombres, descripciones, requisitos y perfiles de LinkedIn de directores) y estructurarlo en un archivo areasData.ts para renderizado dinámico.
 
 ## Fase 2: Desarrollo de la Vista Principal (Corona Circular)
-- [ ] Crear el componente contenedor AreasSection.
-- [ ] Implementar la lógica geométrica/CSS para distribuir los componentes de cada área en forma de corona circular.
-- [ ] Añadir animaciones optimizadas que no degraden el rendimiento en dispositivos de gama media.
-- [ ] Enlazar cada elemento de la corona circular con su ruta dinámica individual.
+- [x] Crear el componente contenedor AreasSection.
+- [x] Implementar la lógica geométrica/CSS para distribuir los componentes de cada área en forma de corona circular.
+- [x] Añadir animaciones optimizadas que no degraden el rendimiento en dispositivos de gama media.
+- [x] Enlazar cada elemento de la corona circular con su ruta dinámica individual.
 
 ## Fase 3: Desarrollo de la Vista Dinámica Individual (/areas/[id])
 - [ ] Configurar la ruta dinámica en Next.js para renderizar la información de cada área.
