@@ -27,4 +27,8 @@ Este documento servirá como bitácora de las implementaciones técnicas, decisi
   - **Hero Section:** Imagen con filtros (`grayscale`, `brightness`, `contrast`) superpuesta con un gradiente negro-rojo y tipografía dinámica.
   - **Requisitos / Qué Buscamos:** Implementación con sistema de grillas (`grid-cols-1 lg:grid-cols-2`), resaltando el borde superior con los colores `#ED1C24` y `#FFBD59` tal cual el diseño, e iterando las viñetas.
   - **Liderazgo (Directores):** Recreación de las *cards* para directores con la imagen recortada, filtros y enlace condicionado hacia su perfil en LinkedIn, manteniendo los grosores y tamaños de letra originales.
-  - **CTA Final:** Estructura inferior para incitar a la postulación que redirige estáticamente a `/convocatoria`.
+  - **Refactorización del CTA:** El bloque de "Llamado a la Acción" se extrajo hacia un componente dedicado.
+
+### Fase 4: Lógica del Componente CTA y Estado de Convocatoria
+- **Creación de `<AreaCTA />`:** Se extrajo el bloque del *Call to Action* final en el componente dedicado `frontend/src/components/AreaCTA.tsx` para mejorar la modularidad y permitir su reutilización.
+- **Flujo de Usuario (Postulación):** El botón "POSTULA AQUÍ" (estilizado con fondo `#ED1C24` y texto blanco en *Archivo Black* / *Open Sans*) no lleva directamente a un formulario externo, sino que redirige utilizando `<Link href="/convocatoria">` de Next.js hacia la sección central de convocatoria. Esto asegura que el usuario primero verifique el estado global (habilitado/deshabilitado) de la convocatoria antes de aplicar.

@@ -17,8 +17,8 @@
 - [x] Construir la sección para los directores con los enlaces correspondientes a LinkedIn.
 
 ## Fase 4: Lógica del Componente CTA y Estado de Convocatoria
-- [ ] Desarrollar el componente CTA ("¿Te interesa?").
-- [ ] Integrar el botón "Postula aquí" asegurando que valide condicionalmente si el estado de la convocatoria general está habilitado.
+- [x] Desarrollar el componente CTA ("¿Te interesa?").
+- [x] Integrar el botón "Postula aquí" asegurando que valide condicionalmente si el estado de la convocatoria general está habilitado.
 
 ## Fase 5: Identidad Visual y Revisión
 - [ ] Aplicar estrictamente la paleta de colores de la marca (#ED1C24, #920207, #FFBD59).
