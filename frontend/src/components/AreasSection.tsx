@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Box } from "lucide-react";
 import { areasData } from "../data/areasData";
 
 export default function AreasSection() {
+  const router = useRouter();
   const [areaSel, setAreaSel] = useState(0);
 
   useEffect(() => {
@@ -87,6 +89,7 @@ export default function AreasSection() {
         </p>
         <button 
           className="bg-[#ED1C24] hover:bg-[#C4151C] text-white border-none font-bold text-[14px] tracking-[1.5px] px-[40px] py-[16px] cursor-pointer transition-colors duration-300"
+          onClick={() => router.push(`/areas/${selectedArea.id}`)}
         >
           DESCUBRE MÁS →
         </button>

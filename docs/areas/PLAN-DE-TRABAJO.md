@@ -11,10 +11,10 @@
 - [x] Enlazar cada elemento de la corona circular con su ruta dinámica individual.
 
 ## Fase 3: Desarrollo de la Vista Dinámica Individual (/areas/[id])
-- [ ] Configurar la ruta dinámica en Next.js para renderizar la información de cada área.
-- [ ] Maquetar la Hero Section (Logo y Tagline del área).
-- [ ] Maquetar la sección informativa de Requisitos y Perfil Buscado.
-- [ ] Construir la sección para los directores con los enlaces correspondientes a LinkedIn.
+- [x] Configurar la ruta dinámica en Next.js para renderizar la información de cada área.
+- [x] Maquetar la Hero Section (Logo y Tagline del área).
+- [x] Maquetar la sección informativa de Requisitos y Perfil Buscado.
+- [x] Construir la sección para los directores con los enlaces correspondientes a LinkedIn.
 
 ## Fase 4: Lógica del Componente CTA y Estado de Convocatoria
 - [ ] Desarrollar el componente CTA ("¿Te interesa?").
