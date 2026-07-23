@@ -1,3 +1,5 @@
+import AnimatedCounter from "./AnimatedCounter";
+
 interface Metric {
   value: number;
   prefix: string;
@@ -13,8 +15,9 @@ const METRICS: Metric[] = [
 
 /**
  * Sección de métricas (RF-03). Portada de `section.metrics` del prototipo.
- * Los valores son estáticos por ahora; el conteo animado (`initCounters`) y
- * la fuente de datos externa se resuelven en las siguientes tareas de esta fase.
+ * El conteo animado vive en `AnimatedCounter` (hook `useCountUp`). La fuente
+ * de datos externa (en vez de `METRICS` hardcodeado) se resuelve en la
+ * siguiente tarea de esta fase.
  */
 export default function MetricsSection() {
   return (
@@ -32,10 +35,11 @@ export default function MetricsSection() {
               : "";
           return (
             <div key={metric.label} className={`relative px-3 lg:px-8 ${borderClass}`}>
-              <div className="font-[family-name:var(--font-archivo-black)] text-[clamp(38px,4.6vw,62px)] leading-none tracking-[-.04em] text-white tabular-nums">
-                {metric.prefix}
-                {metric.value}
-              </div>
+              <AnimatedCounter
+                value={metric.value}
+                prefix={metric.prefix}
+                className="font-[family-name:var(--font-archivo-black)] text-[clamp(38px,4.6vw,62px)] leading-none tracking-[-.04em] text-white tabular-nums"
+              />
               <div className="mt-3 font-[family-name:var(--font-archivo)] text-[11.5px] font-bold tracking-[.16em] text-white/90 uppercase">
                 {metric.label}
               </div>
