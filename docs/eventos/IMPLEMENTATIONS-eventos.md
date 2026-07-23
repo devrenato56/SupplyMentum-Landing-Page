@@ -19,11 +19,13 @@ Este documento sirve como bitácora de los avances y tareas completadas por el e
 - `docs/eventos/assets/`
 
 ### [Jeferson] Tarea 1.2: Tipos de datos y Mock Data
-**Fecha:** [DD/MM/AAAA]
+**Fecha:** 21 de Julio de 2026
 **Descripción:** 
-- [Describe aquí brevemente lo que hiciste]
+- Creación de la interfaz `Event` en TypeScript (definiendo título, fecha, etc.) basándome en el diseño proporcionado.
+- Creación de los datos falsos `mockEvents.ts` para que Robert pueda empezar su maquetación.
 **Archivos modificados/creados:**
-- [Lista de archivos aquí]
+- `[NEW] frontend/src/types/event.ts`
+- `[NEW] frontend/src/data/mockEvents.ts`
 
 ---
 

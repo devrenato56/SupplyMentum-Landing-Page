@@ -4,7 +4,7 @@ Este documento detalla las fases y tareas exclusivas del FRONTEND para la secci�
 
 ## Fase 1: Estructura Base y Datos (Setup)
 - [x] Tarea 1.1: Crear la rama, configurar documentación y crear carpeta `assets`. *(Jeferson)*
-- [ ] Tarea 1.2: Crear interfaz `Event` (título, fecha, ubicación, imagen, desc, link de inscripción) y `mockEvents.ts`. *(Jeferson)*
+- [x] Tarea 1.2: Crear interfaz `Event` (título, fecha, ubicación, imagen, desc, link de inscripción) y `mockEvents.ts`. *(Jeferson)*
 
 ## Fase 2: Componentes Visuales Básicos (UI - Estructura HTML/Tailwind)
 **Objetivo:** Robert extraerá el diseño visual del archivo `SupplyMentum Landing (standalone).html`.
