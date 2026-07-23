@@ -54,3 +54,14 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Flotación suave del isotipo de respaldo (Cube3D) mientras no hay WebGL montado */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
+}
