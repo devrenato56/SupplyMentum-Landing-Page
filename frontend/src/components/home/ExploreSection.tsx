@@ -57,9 +57,9 @@ export default function ExploreSection() {
             <Link
               key={card.href}
               href={card.href}
-              className="group flex flex-col overflow-hidden border border-white/[.07] bg-[#121215] text-inherit no-underline transition-[border-color,transform,box-shadow] duration-300 ease-[cubic-bezier(.22,.61,.36,1)] hover:-translate-y-1.5 hover:border-[#ED1C24]/55 hover:shadow-[0_22px_52px_rgba(0,0,0,.42)]"
+              className="group flex flex-col overflow-hidden border border-white/[.07] bg-[#121215] text-inherit no-underline transition-[border-color,transform,box-shadow] duration-[350ms] ease-[cubic-bezier(.22,.61,.36,1)] hover:-translate-y-1.5 hover:border-[#ED1C24]/55 hover:shadow-[0_22px_52px_rgba(0,0,0,.42)]"
             >
-              <div className="flex flex-1 flex-col gap-2.5 p-6 pb-7">
+              <div className="flex flex-1 flex-col gap-2.5 px-6 pt-[26px] pb-7">
                 <div className="mb-1 font-[family-name:var(--font-archivo)] text-[13px] font-bold tracking-[.2em] text-[#ED1C24]">
                   {card.num}
                 </div>
