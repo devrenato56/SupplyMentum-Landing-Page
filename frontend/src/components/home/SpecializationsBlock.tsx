@@ -5,6 +5,13 @@ import type { Specialization } from "@/lib/data/specializations";
 
 const AUTO_ADVANCE_MS = 5000;
 
+/* Mismos tiempos que `.area-fade`/`.is-out` en site.css (areas.html):
+   transición de .32s, y el contenido se actualiza a los 200ms — antes de
+   que el fade-out termine del todo, para que el fade-in arranque desde
+   ahí en vez de encadenar dos transiciones completas. */
+const FADE_TRANSITION_MS = 320;
+const FADE_SWAP_DELAY_MS = 200;
+
 interface SpecializationsBlockProps {
   specializations: Specialization[];
 }
@@ -18,18 +25,37 @@ interface SpecializationsBlockProps {
  * solo a la siguiente especialización, y un clic la avanza también de
  * inmediato (y reinicia el temporizador, para no encimar avances).
  *
- * La transición visual entre especializaciones y el soporte de
- * `prefers-reduced-motion` / navegación por teclado se resuelven en las
- * siguientes tareas de esta fase.
+ * La transición entre especializaciones porta el patrón `is-out`/`is-in`
+ * de `.area-fade` (visto en `areas.html` del prototipo, panel de área):
+ * fade + leve corrimiento vertical, no un swap seco de contenido.
+ *
+ * El soporte de `prefers-reduced-motion` y la navegación por teclado se
+ * resuelven en la siguiente tarea de esta fase.
  */
 export default function SpecializationsBlock({ specializations }: SpecializationsBlockProps) {
   const [index, setIndex] = useState(0);
+  const [isOut, setIsOut] = useState(false);
+  const indexRef = useRef(index);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const swapTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    indexRef.current = index;
+  }, [index]);
+
+  const goTo = (next: number) => {
+    setIsOut(true);
+    if (swapTimeoutRef.current) clearTimeout(swapTimeoutRef.current);
+    swapTimeoutRef.current = setTimeout(() => {
+      setIndex(next);
+      setIsOut(false);
+    }, FADE_SWAP_DELAY_MS);
+  };
 
   const restartTimer = () => {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
-      setIndex((i) => (i + 1) % specializations.length);
+      goTo((indexRef.current + 1) % specializations.length);
     }, AUTO_ADVANCE_MS);
   };
 
@@ -37,12 +63,13 @@ export default function SpecializationsBlock({ specializations }: Specialization
     restartTimer();
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      if (swapTimeoutRef.current) clearTimeout(swapTimeoutRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- restartTimer se reconstruye cada render a propósito, no debe re-disparar el efecto
   }, [specializations.length]);
 
   const advance = () => {
-    setIndex((i) => (i + 1) % specializations.length);
+    goTo((index + 1) % specializations.length);
     restartTimer();
   };
 
@@ -82,7 +109,12 @@ export default function SpecializationsBlock({ specializations }: Specialization
             />
           </button>
 
-          <div>
+          <div
+            style={{ transitionDuration: `${FADE_TRANSITION_MS}ms` }}
+            className={`transition-[opacity,transform] ease-[cubic-bezier(.22,.61,.36,1)] ${
+              isOut ? "translate-y-[10px] opacity-0" : "translate-y-0 opacity-100"
+            }`}
+          >
             <span className="mb-3 block font-[family-name:var(--font-archivo)] text-xs font-bold tracking-[.16em] text-[#FFBD59] uppercase">
               {current.short}
             </span>
