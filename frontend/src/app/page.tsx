@@ -2,6 +2,7 @@ import NetworkBackground from "@/components/home/NetworkBackground";
 import Hero from "@/components/home/Hero";
 import MetricsSection from "@/components/home/MetricsSection";
 import Specializations from "@/components/home/Specializations";
+import ExploreSection from "@/components/home/ExploreSection";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
         <Hero />
         <MetricsSection />
         <Specializations />
+        <ExploreSection />
       </div>
     </div>
   );
