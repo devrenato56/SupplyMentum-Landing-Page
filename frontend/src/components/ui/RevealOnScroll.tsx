@@ -19,6 +19,12 @@ export default function RevealOnScroll({
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    // Sin animación si el usuario prefiere movimiento reducido: se muestra directo.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      queueMicrotask(() => setIsVisible(true));
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

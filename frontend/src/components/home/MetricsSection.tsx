@@ -1,5 +1,6 @@
 import AnimatedCounter from "./AnimatedCounter";
 import { getMetrics } from "@/lib/data/metrics";
+import RevealOnScroll from "../ui/RevealOnScroll";
 
 /**
  * Sección de métricas (RF-03). Portada de `section.metrics` del prototipo.
@@ -24,7 +25,12 @@ export default async function MetricsSection() {
               ? "lg:border-l lg:border-white/30"
               : "";
           return (
-            <div key={metric.label} className={`relative px-3 lg:px-8 ${borderClass}`}>
+            <RevealOnScroll
+              key={metric.label}
+              direction="up"
+              delayMs={i * 90}
+              className={`relative px-3 lg:px-8 ${borderClass}`}
+            >
               <AnimatedCounter
                 value={metric.value}
                 prefix={metric.prefix}
@@ -33,7 +39,7 @@ export default async function MetricsSection() {
               <div className="mt-3 font-[family-name:var(--font-archivo)] text-[11.5px] font-bold tracking-[.16em] text-white/90 uppercase">
                 {metric.label}
               </div>
-            </div>
+            </RevealOnScroll>
           );
         })}
       </div>
