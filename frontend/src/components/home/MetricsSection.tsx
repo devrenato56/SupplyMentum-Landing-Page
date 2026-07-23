@@ -1,29 +1,19 @@
 import AnimatedCounter from "./AnimatedCounter";
-
-interface Metric {
-  value: number;
-  prefix: string;
-  label: string;
-}
-
-const METRICS: Metric[] = [
-  { value: 120, prefix: "+", label: "Miembros activos" },
-  { value: 40, prefix: "+", label: "Eventos realizados" },
-  { value: 15, prefix: "+", label: "Proyectos ejecutados" },
-  { value: 20, prefix: "+", label: "Empresas aliadas" },
-];
+import { getMetrics } from "@/lib/data/metrics";
 
 /**
  * Sección de métricas (RF-03). Portada de `section.metrics` del prototipo.
- * El conteo animado vive en `AnimatedCounter` (hook `useCountUp`). La fuente
- * de datos externa (en vez de `METRICS` hardcodeado) se resuelve en la
- * siguiente tarea de esta fase.
+ * El conteo animado vive en `AnimatedCounter` (hook `useCountUp`). Los
+ * valores vienen de `getMetrics()` (por ahora un mock, ver
+ * `lib/data/metrics.ts`) en vez de estar hardcodeados en el componente.
  */
-export default function MetricsSection() {
+export default async function MetricsSection() {
+  const metrics = await getMetrics();
+
   return (
     <section aria-label="Cifras del centro" className="border-y border-[#ED1C24] bg-[#ED1C24]">
       <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-y-8 px-4 py-11 sm:px-6 lg:grid-cols-4 lg:gap-y-0 lg:px-8 lg:py-16">
-        {METRICS.map((metric, i) => {
+        {metrics.map((metric, i) => {
           const dividerMobile = i % 2 === 1; // 2ª columna en la grilla de 2 (mobile)
           const dividerDesktop = i > 0; // toda columna salvo la primera, en la grilla de 4
           const borderClass = dividerMobile

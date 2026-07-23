@@ -1,6 +1,7 @@
 import NetworkBackground from "@/components/home/NetworkBackground";
 import Hero from "@/components/home/Hero";
 import MetricsSection from "@/components/home/MetricsSection";
+import Specializations from "@/components/home/Specializations";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <div className="relative z-[1]">
         <Hero />
         <MetricsSection />
+        <Specializations />
       </div>
     </div>
   );
