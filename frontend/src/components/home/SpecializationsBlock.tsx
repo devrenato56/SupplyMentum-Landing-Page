@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { KeyboardEvent } from "react";
 import type { Specialization } from "@/lib/data/specializations";
 
 const AUTO_ADVANCE_MS = 5000;
@@ -29,13 +30,18 @@ interface SpecializationsBlockProps {
  * de `.area-fade` (visto en `areas.html` del prototipo, panel de área):
  * fade + leve corrimiento vertical, no un swap seco de contenido.
  *
- * El soporte de `prefers-reduced-motion` y la navegación por teclado se
- * resuelven en la siguiente tarea de esta fase.
+ * Accesibilidad: con `prefers-reduced-motion` el contenido cambia directo,
+ * sin el fade (igual que el `if (REDUCED) { paint(); return; }` de
+ * `areas.html`). El disparador es un `<button>` real, así que ya recibe
+ * foco y se activa con Enter/Espacio de forma nativa; además responde a
+ * las flechas (← ↑ retrocede, → ↓ avanza), igual que el `keydown` de la
+ * rueda de `areas.html`.
  */
 export default function SpecializationsBlock({ specializations }: SpecializationsBlockProps) {
   const [index, setIndex] = useState(0);
   const [isOut, setIsOut] = useState(false);
   const indexRef = useRef(index);
+  const reducedMotionRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const swapTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -43,7 +49,15 @@ export default function SpecializationsBlock({ specializations }: Specialization
     indexRef.current = index;
   }, [index]);
 
+  useEffect(() => {
+    reducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
   const goTo = (next: number) => {
+    if (reducedMotionRef.current) {
+      setIndex(next);
+      return;
+    }
     setIsOut(true);
     if (swapTimeoutRef.current) clearTimeout(swapTimeoutRef.current);
     swapTimeoutRef.current = setTimeout(() => {
@@ -68,9 +82,22 @@ export default function SpecializationsBlock({ specializations }: Specialization
     // eslint-disable-next-line react-hooks/exhaustive-deps -- restartTimer se reconstruye cada render a propósito, no debe re-disparar el efecto
   }, [specializations.length]);
 
-  const advance = () => {
-    goTo((index + 1) % specializations.length);
+  const stepBy = (delta: number) => {
+    const n = specializations.length;
+    goTo(((index + delta) % n + n) % n);
     restartTimer();
+  };
+
+  const advance = () => stepBy(1);
+
+  const onTriggerKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      stepBy(1);
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      stepBy(-1);
+    }
   };
 
   const current = specializations[index];
@@ -89,7 +116,8 @@ export default function SpecializationsBlock({ specializations }: Specialization
           <button
             type="button"
             onClick={advance}
-            aria-label={`Especialización actual: ${current.name}. Haz clic para ver la siguiente.`}
+            onKeyDown={onTriggerKeyDown}
+            aria-label={`Especialización actual: ${current.name}. Actívalo o usa las flechas para ver otra.`}
             className="group relative mx-auto h-40 w-40 flex-none cursor-pointer lg:h-52 lg:w-52"
           >
             <span
