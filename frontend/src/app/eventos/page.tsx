@@ -5,6 +5,8 @@ import FeaturedEvent from '../../components/FeaturedEvent';
 import EventCard from '../../components/EventCard';
 import SearchAndFilters, { FilterType } from '../../components/SearchAndFilters';
 import { mockEvents } from '../../data/mockEvents';
+import SmoothScroll from '../../components/ui/SmoothScroll';
+import ConstellationBackground from '../../components/convocatoria/ConstellationBackground';
 
 export default function EventosPage() {
   const [filter, setFilter] = useState<FilterType>('TODOS');
@@ -66,9 +68,14 @@ export default function EventosPage() {
 
   return (
     <div className="min-h-screen bg-[#0B0B0C] text-[#F5F4F2] pt-[90px] pb-[120px] px-4 md:px-[72px] relative overflow-hidden font-sans">
+      <SmoothScroll />
+
+      {/* Fondo de constelación (mismo efecto que Home y Convocatoria) */}
+      <ConstellationBackground />
+
       {/* Resplandor rojo extraído del HTML original */}
-      <div className="absolute right-[-160px] top-[-160px] w-[560px] h-[560px] pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(237,28,36,.16) 0%, transparent 65%)' }}></div>
-      
+      <div className="absolute right-[-160px] top-[-160px] w-[560px] h-[560px] pointer-events-none z-0" style={{ background: 'radial-gradient(circle, rgba(237,28,36,.16) 0%, transparent 65%)' }}></div>
+
       <div className="w-full mx-auto relative z-10">
         
         {/* Header */}
