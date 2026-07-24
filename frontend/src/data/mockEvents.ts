@@ -9,7 +9,7 @@ export const mockEvents: Event[] = [
     time: "9:00 a.m.",
     location: "Auditorio CEPS - UNI",
     status: "PRÓXIMO",
-    imageUrl: "/images/event-summit.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=800",
     registrationLink: "https://luma.com/summit-uni"
   },
   {
@@ -20,7 +20,7 @@ export const mockEvents: Event[] = [
     time: "9:00 a.m.",
     location: "Auditorio CEPS - UNI",
     status: "PRÓXIMO",
-    imageUrl: "/images/event-taller.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=800",
     registrationLink: "https://luma.com/taller"
   },
   {
@@ -31,7 +31,7 @@ export const mockEvents: Event[] = [
     time: "9:00 a.m.",
     location: "Auditorio CEPS - UNI",
     status: "PRÓXIMO",
-    imageUrl: "/images/event-visita.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
     registrationLink: "https://luma.com/visita"
   },
   {
@@ -42,7 +42,7 @@ export const mockEvents: Event[] = [
     time: "9:00 a.m.",
     location: "Auditorio CEPS - UNI",
     status: "PASADO",
-    imageUrl: "/images/event-charla.jpg"
+    imageUrl: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=800"
   },
   {
     id: "5",
@@ -52,7 +52,7 @@ export const mockEvents: Event[] = [
     time: "9:00 a.m.",
     location: "Auditorio CEPS - UNI",
     status: "PASADO",
-    imageUrl: "/images/event-excel.jpg"
+    imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"
   },
   {
     id: "6",
@@ -62,6 +62,6 @@ export const mockEvents: Event[] = [
     time: "9:00 a.m.",
     location: "Auditorio CEPS - UNI",
     status: "PASADO",
-    imageUrl: "/images/event-integracion.jpg"
+    imageUrl: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=800"
   }
 ];
