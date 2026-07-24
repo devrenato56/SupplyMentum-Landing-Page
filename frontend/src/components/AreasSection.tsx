@@ -78,17 +78,17 @@ export default function AreasSection() {
       </div>
       
       <div className="relative w-full max-w-[560px] justify-self-start">
-        <div className="text-[12px] tracking-[4px] text-[#ED1C24] font-bold mb-[18px]">
+        <div className="text-[12px] tracking-[4px] text-[#ED1C24] font-bold mb-[18px] font-[family-name:var(--font-open-sans)]">
           NUESTRAS ÁREAS · SCROLLEA PARA GIRAR
         </div>
-        <h1 className="m-0 mb-5 text-[52px] font-extrabold leading-[1.1]">
+        <h1 className="m-0 mb-5 text-[52px] font-extrabold leading-[1.1] font-[family-name:var(--font-archivo-black)]">
           {selectedArea.name}
         </h1>
-        <p className="m-0 mb-8 text-[16px] text-[#9B9AA0] font-light leading-[1.8] max-w-[520px] text-pretty">
+        <p className="m-0 mb-8 text-[16px] text-[#9B9AA0] font-light leading-[1.8] max-w-[520px] text-pretty font-[family-name:var(--font-open-sans)]">
           {selectedArea.desc}
         </p>
         <button 
-          className="bg-[#ED1C24] hover:bg-[#C4151C] text-white border-none font-bold text-[14px] tracking-[1.5px] px-[40px] py-[16px] cursor-pointer transition-colors duration-300"
+          className="bg-[#ED1C24] hover:bg-[#C4151C] text-white border-none font-bold text-[14px] tracking-[1.5px] px-[40px] py-[16px] cursor-pointer transition-colors duration-300 font-[family-name:var(--font-open-sans)]"
           onClick={() => router.push(`/areas/${selectedArea.id}`)}
         >
           DESCUBRE MÁS →
