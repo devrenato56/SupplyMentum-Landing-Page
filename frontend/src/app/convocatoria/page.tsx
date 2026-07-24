@@ -6,6 +6,7 @@ import CountdownTimer from "@/components/convocatoria/CountdownTimer";
 import AreasGrid from "@/components/convocatoria/AreasGrid";
 import BenefitsGrid from "@/components/convocatoria/BenefitsGrid";
 import ConstellationBackground from "@/components/convocatoria/ConstellationBackground";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 
 export default function ConvocatoriaPage() {
   const [isConvocatoriaActive] = useState(true);
@@ -17,6 +18,8 @@ export default function ConvocatoriaPage() {
 
   return (
     <div className="relative w-full flex flex-col min-h-screen bg-[#070709] text-white overflow-hidden">
+      <SmoothScroll />
+
       {/* Constellation Canvas background */}
       <ConstellationBackground />
 
