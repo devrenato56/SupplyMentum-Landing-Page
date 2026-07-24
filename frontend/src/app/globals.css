@@ -39,6 +39,12 @@
   animation-play-state: paused;
 }
 
+.animate-marquee-no-pause {
+  display: flex;
+  width: 200%;
+  animation: marquee 35s linear infinite;
+}
+
 /* Text stroke matching exact screenshot: background fill + crisp dark grey stroke */
 .text-stroke-grey {
   -webkit-text-stroke: 1.5px #33333e;
