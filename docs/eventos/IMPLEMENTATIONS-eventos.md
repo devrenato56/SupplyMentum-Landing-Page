@@ -31,22 +31,25 @@ Este documento sirve como bitácora de los avances y tareas completadas por el e
 
 ## Fase 2: Componentes Visuales Básicos (UI)
 
-### [Robert] Tarea 2.1: Componente FeaturedEvent (Evento Destacado)
-**Fecha:** [DD/MM/AAAA]
+### [Jeferson] Tarea 2.1: Componente FeaturedEvent (Evento Destacado)
+**Fecha:** 23 de Julio de 2026
 **Descripción:** 
-- [Describe aquí brevemente lo que hiciste]
+- Construcción del componente Hero principal de eventos.
+- Se extrajeron estilos exactos del HTML (fondo #131316, borde #26262A).
+- Implementación del filtro 'saturate-50' para mantener la identidad visual del diseño.
 **Archivos modificados/creados:**
-- [Lista de archivos aquí]
+- `frontend/src/components/FeaturedEvent.tsx`
 
-### [Robert] Tarea 2.2: Componente EventCard
-**Fecha:** [DD/MM/AAAA]
+### [Jeferson] Tarea 2.2: Componente EventCard
+**Fecha:** 23 de Julio de 2026
 **Descripción:** 
-- [Describe aquí brevemente lo que hiciste]
+- Creación de las tarjetas para la grilla de eventos.
+- Ajuste de proporciones exactas (altura de imagen a 170px) y hover effects.
 **Archivos modificados/creados:**
-- [Lista de archivos aquí]
+- `frontend/src/components/EventCard.tsx`
 
-### [Jeferson] Tarea 2.3: Componente FaqAccordion
-**Fecha:** [DD/MM/AAAA]
+### [Robert] Tarea 2.3: Componente FaqAccordion
+**Fecha:** [Pendiente]
 **Descripción:** 
 - [Describe aquí brevemente lo que hiciste]
 **Archivos modificados/creados:**
@@ -57,18 +60,23 @@ Este documento sirve como bitácora de los avances y tareas completadas por el e
 ## Fase 3: Lógica y Ensamblaje
 
 ### [Jeferson] Tarea 3.1: Componente SearchAndFilters
-**Fecha:** [DD/MM/AAAA]
+**Fecha:** 23 de Julio de 2026
 **Descripción:** 
-- [Describe aquí brevemente lo que hiciste]
+- Desarrollo de barra de búsqueda y botones de filtro (Todos, Próximos, Realizados).
+- Diseño alineado a la izquierda según especificación del HTML.
 **Archivos modificados/creados:**
-- [Lista de archivos aquí]
+- `frontend/src/components/SearchAndFilters.tsx`
 
-### [Equipo] Tarea 3.2: Ensamblar página principal (page.tsx)
-**Fecha:** [DD/MM/AAAA]
+### [Jeferson] Tarea 3.2: Ensamblar página principal (page.tsx)
+**Fecha:** 23 de Julio de 2026
 **Descripción:** 
-- [Describe aquí brevemente lo que hiciste]
+- Ensamblaje de todos los componentes en `page.tsx`.
+- Lógica de estado para filtros y búsqueda de texto.
+- Implementación del gradiente radial decorativo extraído de la plantilla original.
+- Carga de imágenes dinámicas desde Unsplash para mejorar la fidelidad del mock.
 **Archivos modificados/creados:**
-- [Lista de archivos aquí]
+- `frontend/src/app/eventos/page.tsx`
+- `frontend/src/data/mockEvents.ts`
 
 ---
 
