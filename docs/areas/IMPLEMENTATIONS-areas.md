@@ -32,3 +32,9 @@ Este documento servirá como bitácora de las implementaciones técnicas, decisi
 ### Fase 4: Lógica del Componente CTA y Estado de Convocatoria
 - **Creación de `<AreaCTA />`:** Se extrajo el bloque del *Call to Action* final en el componente dedicado `frontend/src/components/AreaCTA.tsx` para mejorar la modularidad y permitir su reutilización.
 - **Flujo de Usuario (Postulación):** El botón "POSTULA AQUÍ" (estilizado con fondo `#ED1C24` y texto blanco en *Archivo Black* / *Open Sans*) no lleva directamente a un formulario externo, sino que redirige utilizando `<Link href="/convocatoria">` de Next.js hacia la sección central de convocatoria. Esto asegura que el usuario primero verifique el estado global (habilitado/deshabilitado) de la convocatoria antes de aplicar.
+### Fase 5: Identidad Visual y Revisión
+- **Auditoría de Tipografías:** Se agregaron explícitamente las utilidades `font-[family-name:var(--font-archivo-black)]` y `font-[family-name:var(--font-open-sans)]` a los componentes `AreasSection.tsx`, `AreaCTA.tsx` y la ruta dinámica, de modo que toda la jerarquía de títulos y descripciones siga exactamente el *brand guidelines*.
+- **Auditoría de Paleta de Colores:** Se comprobó el uso irrestricto de las variables `#ED1C24` (Rojo Base), `#FFBD59` (Ámbar) y escalas de grises oscuros (`#0B0B0C`, `#131316`, `#26262A`) en fondos y bordes de las tarjetas.
+- **Validación Responsive:**
+  - El componente principal en corona (`AreasSection.tsx`) emplea valores matemáticos `calc`, `vw` y porcentajes para que la corona se adapte sin romper la UI en dispositivos móviles (`grid-cols-1`) y de escritorio (`lg:grid-cols-2`), manteniendo los íconos centrados.
+  - Las vistas dinámicas (`[id]/page.tsx`) distribuyen de manera elegante la matriz de Requisitos y Directores en columnas mediante `md:grid-cols-2`, garantizando fluidez en cualquier dispositivo.
