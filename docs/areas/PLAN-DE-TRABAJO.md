@@ -21,7 +21,7 @@
 - [x] Integrar el botón "Postula aquí" asegurando que valide condicionalmente si el estado de la convocatoria general está habilitado.
 
 ## Fase 5: Identidad Visual y Revisión
-- [ ] Aplicar estrictamente la paleta de colores de la marca (#ED1C24, #920207, #FFBD59).
-- [ ] Aplicar las tipografías oficiales (Archivo Black para títulos, Open Sans para cuerpo).
-- [ ] Garantizar diseño responsive.
-- [ ] Actualizar IMPLEMENTATIONS-areas.md y preparar el Pull Request hacia main.
+- [x] Aplicar estrictamente la paleta de colores de la marca (#ED1C24, #920207, #FFBD59).
+- [x] Aplicar las tipografías oficiales (Archivo Black para títulos, Open Sans para cuerpo).
+- [x] Garantizar diseño responsive.
+- [x] Actualizar IMPLEMENTATIONS-areas.md y preparar el Pull Request hacia main.
