@@ -72,9 +72,49 @@
   -webkit-text-stroke: 1.5px rgba(237, 28, 36, 0.7);
 }
 
-/* Smooth scrolling */
+/* Smooth scrolling — con el mismo guard de movimiento reducido que usa
+   site.css en el prototipo (`html{ scroll-behavior:auto }` bajo reduce). */
 html {
   scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Cuando Lenis está activo (añade la clase `.lenis` a <html>) él conduce el
+   scroll por rAF; el `scroll-behavior: smooth` de CSS pelearía con su inercia,
+   así que se desactiva y se dejan los estilos recomendados por Lenis. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Flotación suave del isotipo de respaldo (Cube3D) mientras no hay WebGL montado */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-18px);
+  }
 }
 
 /* ── Conveyor belt scrollbar ──────────────────────────────────── */
