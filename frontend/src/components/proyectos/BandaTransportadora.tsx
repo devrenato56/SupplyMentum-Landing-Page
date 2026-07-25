@@ -74,18 +74,14 @@ export default function BandaTransportadora() {
         container.scrollLeft += scrollSpeed;
       }
 
-      // Seamless infinite looping math
-      // Since we repeated the list 3 times, container.scrollWidth / 3 represents 1 full set.
-      const oneSetWidth = container.scrollWidth / 3;
-      if (oneSetWidth > 0) {
-        // If we scroll into the third set (scrollLeft >= oneSetWidth * 2), wrap back to the second set
-        if (container.scrollLeft >= oneSetWidth * 2) {
-          container.scrollLeft -= oneSetWidth;
-        }
-        // If we drag/scroll left near the start (scrollLeft <= 10), wrap forward to the middle set
-        else if (container.scrollLeft <= 10) {
-          container.scrollLeft += oneSetWidth;
-        }
+      // 1. Calculamos el límite máximo de scroll a la derecha
+      const maxScrollLeft = container.scrollWidth - container.clientWidth;
+
+      // 2. Margen de anticipación: reinicia 150px ANTES de tocar el borde final absoluto
+      const offsetAnticipacion = 300;
+
+      if (container.scrollLeft >= maxScrollLeft - offsetAnticipacion) {
+        container.scrollLeft = 0; // Vuelve al inicio de la izquierda
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -122,24 +118,13 @@ export default function BandaTransportadora() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center py-6 relative select-none">
-      {/* Industrial Top Rail / Border */}
-      <div className="w-full max-w-[95vw] h-[1px] bg-gradient-to-r from-transparent via-red-900/60 to-transparent relative mb-2">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#ED1C24]/30 to-transparent animate-pulse" />
-      </div>
-
+    <div className="w-full flex flex-col items-center relative select-none">
       {/* Viewport container with horizontal fading overlays */}
-      <div className="relative w-full overflow-hidden py-4">
-        {/* Left Glow/Fade Overlay */}
-        <div className="absolute inset-y-0 left-0 w-12 sm:w-32 bg-gradient-to-r from-[#070709] via-[#070709]/80 to-transparent z-20 pointer-events-none" />
-
-        {/* Right Glow/Fade Overlay */}
-        <div className="absolute inset-y-0 right-0 w-12 sm:w-32 bg-gradient-to-l from-[#070709] via-[#070709]/80 to-transparent z-20 pointer-events-none" />
-
+      <div className="relative w-full overflow-hidden py-1">
         {/* Scrollable conveyor belt wrapper */}
         <div
           ref={scrollRef}
-          className="w-full overflow-x-auto conveyor-scrollbar cursor-grab active:cursor-grabbing py-2 select-none"
+          className="conveyor-scrollbar w-full overflow-x-auto cursor-grab active:cursor-grabbing py-6 select-none"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUpOrLeave}
@@ -168,20 +153,6 @@ export default function BandaTransportadora() {
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Industrial Bottom Rail / Border */}
-      <div className="w-full max-w-[95vw] h-[1px] bg-gradient-to-r from-transparent via-red-900/60 to-transparent relative mt-2">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#ED1C24]/30 to-transparent animate-pulse" />
-      </div>
-
-      {/* Faint system active status light */}
-      <div className="flex items-center gap-2 mt-4 text-[10px] tracking-widest text-zinc-500 font-mono">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ED1C24]"></span>
-        </span>
-        <span>BANDA TRANSPORTADORA AUTOMÁTICA (ARRASTRABLE)</span>
       </div>
     </div>
   );
