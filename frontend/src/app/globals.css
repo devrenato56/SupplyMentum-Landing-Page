@@ -24,6 +24,7 @@
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -36,6 +37,27 @@
 }
 
 .animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Conveyor belt animations */
+@keyframes conveyor-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-conveyor {
+  display: flex;
+  width: max-content;
+  animation: conveyor-left 40s linear infinite;
+}
+
+.animate-conveyor:hover {
   animation-play-state: paused;
 }
 
@@ -69,24 +91,40 @@ html.lenis,
 html.lenis body {
   height: auto;
 }
+
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
+
 .lenis.lenis-smooth [data-lenis-prevent] {
   overscroll-behavior: contain;
 }
+
 .lenis.lenis-stopped {
   overflow: clip;
 }
 
 /* Flotación suave del isotipo de respaldo (Cube3D) mientras no hay WebGL montado */
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-18px);
   }
 }
 
+/* ── Conveyor belt scrollbar ──────────────────────────────────── */
+.conveyor-scrollbar {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: rgba(26, 26, 31, 0.55) rgba(9, 9, 11, 0.5);
+  /* Firefox thumb / track */
+}
+
+.conveyor-scrollbar::-webkit-scrollbar {
+  height: 2px;
+}
