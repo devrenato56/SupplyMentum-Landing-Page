@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
 import { mockFaqs } from '../data/mockFaqs';
-import mascotaImg from '@docs/eventos/assets/mascota-duda.png';
+
 
 export default function FaqAccordion() {
   // Estado para rastrear qué pregunta está expandida
@@ -82,7 +82,7 @@ export default function FaqAccordion() {
         <div className="lg:col-span-1 flex justify-center lg:justify-start items-start w-full pt-24">
           <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[350px] md:h-[350px] transition-transform duration-500 hover:scale-105 drop-shadow-[0_0_30px_rgba(237,28,36,0.45)] hover:drop-shadow-[0_0_45px_rgba(237,28,36,0.7)]">
             <Image
-              src={mascotaImg}
+              src="/images/mascota-duda.png"
               alt="Mascota SupplyMentum"
               fill
               className="object-contain brightness-110"
