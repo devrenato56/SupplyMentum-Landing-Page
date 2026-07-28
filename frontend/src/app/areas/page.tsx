@@ -1,5 +1,6 @@
-import AreasSection from "@/components/AreasSection";
+import AreasSection from "@/components/areas/AreasSection";
 import React from "react";
+import { areasData } from "@/data/areasData";
 
 export const metadata = {
   title: "Áreas - SupplyMentum UNI",
@@ -9,7 +10,7 @@ export const metadata = {
 export default function AreasPage() {
   return (
     <main>
-      <AreasSection />
+      <AreasSection initialAreas={areasData} />
     </main>
   );
 }
