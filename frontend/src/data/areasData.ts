@@ -15,6 +15,7 @@ export interface Area {
   buscamos: string[];
   directores: Director[];
   iconPaths: string[];
+  img: string;
 }
 
 export const areasData: Area[] = [
@@ -37,7 +38,8 @@ export const areasData: Area[] = [
     directores: [
       { name: 'Director/a del área', role: 'DIRECTOR', desc: 'Lidera la estrategia y los proyectos del área.', img: 'https://picsum.photos/seed/sm-dir0a/600/600', linkedinUrl: '#' },
       { name: 'Co-director/a del área', role: 'CO-DIRECTOR', desc: 'Acompaña la gestión y el desarrollo del equipo.', img: 'https://picsum.photos/seed/sm-dir0b/600/600', linkedinUrl: '#' }
-    ]
+    ],
+    img: 'https://picsum.photos/seed/sm-area-operaciones/1800/900'
   },
   {
     id: 'marketing',
@@ -58,7 +60,8 @@ export const areasData: Area[] = [
     directores: [
       { name: 'Director/a del área', role: 'DIRECTOR', desc: 'Lidera la estrategia y los proyectos del área.', img: 'https://picsum.photos/seed/sm-dir1a/600/600', linkedinUrl: '#' },
       { name: 'Co-director/a del área', role: 'CO-DIRECTOR', desc: 'Acompaña la gestión y el desarrollo del equipo.', img: 'https://picsum.photos/seed/sm-dir1b/600/600', linkedinUrl: '#' }
-    ]
+    ],
+    img: 'https://picsum.photos/seed/sm-area-marketing/1800/900'
   },
   {
     id: 'talento',
@@ -79,7 +82,8 @@ export const areasData: Area[] = [
     directores: [
       { name: 'Director/a del área', role: 'DIRECTOR', desc: 'Lidera la estrategia y los proyectos del área.', img: 'https://picsum.photos/seed/sm-dir2a/600/600', linkedinUrl: '#' },
       { name: 'Co-director/a del área', role: 'CO-DIRECTOR', desc: 'Acompaña la gestión y el desarrollo del equipo.', img: 'https://picsum.photos/seed/sm-dir2b/600/600', linkedinUrl: '#' }
-    ]
+    ],
+    img: 'https://picsum.photos/seed/sm-area-talento/1800/900'
   },
   {
     id: 'corporativas',
@@ -100,7 +104,8 @@ export const areasData: Area[] = [
     directores: [
       { name: 'Director/a del área', role: 'DIRECTOR', desc: 'Lidera la estrategia y los proyectos del área.', img: 'https://picsum.photos/seed/sm-dir3a/600/600', linkedinUrl: '#' },
       { name: 'Co-director/a del área', role: 'CO-DIRECTOR', desc: 'Acompaña la gestión y el desarrollo del equipo.', img: 'https://picsum.photos/seed/sm-dir3b/600/600', linkedinUrl: '#' }
-    ]
+    ],
+    img: 'https://picsum.photos/seed/sm-area-corporativas/1800/900'
   },
   {
     id: 'proyectos',
@@ -121,7 +126,8 @@ export const areasData: Area[] = [
     directores: [
       { name: 'Director/a del área', role: 'DIRECTOR', desc: 'Lidera la estrategia y los proyectos del área.', img: 'https://picsum.photos/seed/sm-dir4a/600/600', linkedinUrl: '#' },
       { name: 'Co-director/a del área', role: 'CO-DIRECTOR', desc: 'Acompaña la gestión y el desarrollo del equipo.', img: 'https://picsum.photos/seed/sm-dir4b/600/600', linkedinUrl: '#' }
-    ]
+    ],
+    img: 'https://picsum.photos/seed/sm-area-proyectos/1800/900'
   },
   {
     id: 'tecnologia',
@@ -142,6 +148,7 @@ export const areasData: Area[] = [
     directores: [
       { name: 'Director/a del área', role: 'DIRECTOR', desc: 'Lidera la estrategia y los proyectos del área.', img: 'https://picsum.photos/seed/sm-dir5a/600/600', linkedinUrl: '#' },
       { name: 'Co-director/a del área', role: 'CO-DIRECTOR', desc: 'Acompaña la gestión y el desarrollo del equipo.', img: 'https://picsum.photos/seed/sm-dir5b/600/600', linkedinUrl: '#' }
-    ]
+    ],
+    img: 'https://picsum.photos/seed/sm-area-tecnologia/1800/900'
   }
 ];
