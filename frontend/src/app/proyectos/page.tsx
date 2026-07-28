@@ -3,6 +3,7 @@
 import ConstellationBackground from "@/components/convocatoria/ConstellationBackground";
 import BandaTransportadora from "@/components/proyectos/BandaTransportadora";
 import { Proyecto } from "@/components/proyectos/ProyectoCard";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 import { Archivo_Black, Archivo, Open_Sans } from "next/font/google";
 
 const archivoBlack = Archivo_Black({
@@ -26,6 +27,7 @@ const openSans = Open_Sans({
 export default function ProyectosPage() {
   return (
     <div className={`${archivoBlack.variable} ${archivoN.variable} ${openSans.variable} relative w-full flex flex-col min-h-screen bg-[#070709] text-white overflow-hidden justify-start items-center`}>
+      <SmoothScroll />
       {/* Constellation Canvas background */}
       <ConstellationBackground />
 
