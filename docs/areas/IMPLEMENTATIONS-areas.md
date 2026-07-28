@@ -1,40 +1,39 @@
-# Implementaciones - Sección Áreas
+# Implementación de la Sección de Áreas
 
-Este documento servirá como bitácora de las implementaciones técnicas, decisiones de arquitectura y registro de componentes creados para la sección Áreas, según lo estructurado en el PLAN-DE-TRABAJO.md.
+Este documento resume los cambios arquitectónicos y de estilo implementados para la sección de áreas del proyecto SupplyMentum, garantizando una fidelidad total con el diseño original (HTML + CSS Vanilla).
 
-## Registro de Tareas
+## Estructura de Componentes
 
-*(Este archivo se irá actualizando a medida que se completen las fases)*
+Se adoptó una estructura basada en componentes de cliente/servidor para maximizar el rendimiento y la capacidad de SSR/SSG de Next.js:
 
-### Fase 1: Preparación y Estructura de Datos
-- **Extracción de datos:** Se extrajo el contenido de prueba (mock) del HTML proporcionado y se estructuró en el archivo `frontend/src/data/areasData.ts`.
-- **Estructura TypeScript:** Se crearon las interfaces `Area` y `Director` para tener un tipado fuerte que defina la estructura de la información, incluyendo los *paths* SVG de los iconos para evitar dependencias externas pesadas si se requiere.
+1.  **`src/app/areas/page.tsx`**: Server component encargado del layout principal de la vista de áreas.
+2.  **`src/components/areas/AreasSection.tsx`**: Client component que contiene la lógica interactiva de la "rueda orbital" (wheel) para seleccionar áreas y renderiza la vista 3D.
+3.  **`src/app/areas/[id]/page.tsx`**: Server component dinámico que genera las páginas de detalle de cada área en base a la información extraída de `areasData.ts`.
+4.  **`src/components/areas/AreaCTA.tsx`**: Componente reutilizable para el Call-To-Action.
+5.  **`src/components/home/Cube3D.tsx`**: Componente de Three.js / React Three Fiber central que se incrustó en el medio de la rueda interactiva de áreas.
 
+## Integración del Diseño (Fidelidad HTML/CSS)
 
-### Fase 2: Desarrollo de la Vista Principal (Corona Circular)
-- **Creación del componente:** Se implementó `AreasSection.tsx` y su ruta de acceso en `frontend/src/app/areas/page.tsx`.
-- **Lógica Geométrica con Tailwind CSS:** 
-  - La distribución en corona circular se logró utilizando lógica matemática trigonométrica (`Math.sin` y `Math.cos`) en un bloque `useEffect` para calcular las posiciones (`x` e `y`) de cada uno de los 6 elementos del anillo, basándose en la fórmula de la circunferencia.
-  - Para mapear estas coordenadas a Tailwind y estilos en línea, se pasaron los valores calculados de `left` y `top` en porcentajes al atributo `style` de React, mientras que todo el *styling* base (colores, bordes, layouts absolutos, transformaciones) se manejó limpiamente con utilidades de Tailwind CSS (ej. `absolute -translate-x-1/2 -translate-y-1/2`).
-- **Animaciones Optimizadas:**
-  - El giro interactivo se controla manejando el evento de scroll (`wheel`). Para evitar el re-renderizado excesivo y la sobrecarga del navegador (jank) que puede degradar dispositivos de gama media, se implementó un mecanismo de *throttle* ("debounce" por tiempo, con 380ms) dentro del event listener de scroll.
-  - Las transiciones fluidas de los elementos al girar (cambios de posición y escalado del nodo activo) están delegadas completamente al motor CSS del navegador usando la clase `transition-all duration-500 ease-out`, garantizando animaciones calculadas por GPU.
+Para asegurar la fidelidad al 100% con los archivos `template/areas.html` y `template/area.html`:
 
-### Fase 3: Desarrollo de la Vista Dinámica Individual (`/areas/[id]`)
-- **Ruta Dinámica y SSR:** Se creó el archivo `frontend/src/app/areas/[id]/page.tsx`. Al ejecutarse del lado del servidor (SSR), obtiene el parámetro `id` dinámicamente, busca la coincidencia exacta en `areasData.ts` y si no existe retorna un error `404` controlado mediante `notFound()` de Next.js.
-- **Tipografías y Variables CSS:** Se integraron las fuentes oficiales (`Archivo_Black` y `Open_Sans`) a través de `next/font/google` inyectándolas en el `layout.tsx` raíz como variables de entorno CSS (`--font-archivo-black`, etc.). Esto permite consumirlas directamente como clases arbitrarias en Tailwind (`font-[family-name:var(--font-archivo-black)]`) respetando el rendimiento.
-- **Maquetación y Fidelidad HTML:**
-  - **Hero Section:** Imagen con filtros (`grayscale`, `brightness`, `contrast`) superpuesta con un gradiente negro-rojo y tipografía dinámica.
-  - **Requisitos / Qué Buscamos:** Implementación con sistema de grillas (`grid-cols-1 lg:grid-cols-2`), resaltando el borde superior con los colores `#ED1C24` y `#FFBD59` tal cual el diseño, e iterando las viñetas.
-  - **Liderazgo (Directores):** Recreación de las *cards* para directores con la imagen recortada, filtros y enlace condicionado hacia su perfil en LinkedIn, manteniendo los grosores y tamaños de letra originales.
-  - **Refactorización del CTA:** El bloque de "Llamado a la Acción" se extrajo hacia un componente dedicado.
+-   **Componente Interactivo**: La matemática elíptica de la rueda de selección (radios X/Y) y el sistema de rotación continuo e interactivo fue adaptado de JavaScript Vanilla a React hooks (`useRef`, `useCallback`, `requestAnimationFrame`). Se conservaron todas las funciones que otorgan inercia y arrastre (dragging).
+-   **CSS de la Rueda Orbital**: Debido a que los estilos para animar los nodos (`.wheel`, `.wheel-track`, `.node`, etc.) requerían propiedades CSS avanzadas, fueron extraídos de `site.css` y migrados directamente al archivo global de Tailwind `globals.css` en la aplicación de Next.js.
+-   **Páginas de Detalle**: En `app/areas/[id]/page.tsx`, la maquetación se reconstruyó utilizando clases de utilidad de Tailwind pero conservando de forma estricta los valores de marca (`#ED1C24`, `#FFBD59`) y las variables tipográficas CSS (`var(--font-archivo-black)`, `var(--font-open-sans)`).
 
-### Fase 4: Lógica del Componente CTA y Estado de Convocatoria
-- **Creación de `<AreaCTA />`:** Se extrajo el bloque del *Call to Action* final en el componente dedicado `frontend/src/components/AreaCTA.tsx` para mejorar la modularidad y permitir su reutilización.
-- **Flujo de Usuario (Postulación):** El botón "POSTULA AQUÍ" (estilizado con fondo `#ED1C24` y texto blanco en *Archivo Black* / *Open Sans*) no lleva directamente a un formulario externo, sino que redirige utilizando `<Link href="/convocatoria">` de Next.js hacia la sección central de convocatoria. Esto asegura que el usuario primero verifique el estado global (habilitado/deshabilitado) de la convocatoria antes de aplicar.
-### Fase 5: Identidad Visual y Revisión
-- **Auditoría de Tipografías:** Se agregaron explícitamente las utilidades `font-[family-name:var(--font-archivo-black)]` y `font-[family-name:var(--font-open-sans)]` a los componentes `AreasSection.tsx`, `AreaCTA.tsx` y la ruta dinámica, de modo que toda la jerarquía de títulos y descripciones siga exactamente el *brand guidelines*.
-- **Auditoría de Paleta de Colores:** Se comprobó el uso irrestricto de las variables `#ED1C24` (Rojo Base), `#FFBD59` (Ámbar) y escalas de grises oscuros (`#0B0B0C`, `#131316`, `#26262A`) en fondos y bordes de las tarjetas.
-- **Validación Responsive:**
-  - El componente principal en corona (`AreasSection.tsx`) emplea valores matemáticos `calc`, `vw` y porcentajes para que la corona se adapte sin romper la UI en dispositivos móviles (`grid-cols-1`) y de escritorio (`lg:grid-cols-2`), manteniendo los íconos centrados.
-  - Las vistas dinámicas (`[id]/page.tsx`) distribuyen de manera elegante la matriz de Requisitos y Directores en columnas mediante `md:grid-cols-2`, garantizando fluidez en cualquier dispositivo.
+## Optimizaciones de Layout y Rendimiento (Refinamientos)
+
+- **Layout Global (`.wrap`)**: Se reintrodujo la clase `.wrap` en `globals.css` (con un `max-width` global) para forzar un centrado simétrico en todas las secciones, eliminando los márgenes asimétricos y optimizando el espaciado en la página de detalle (`[id]/page.tsx`). 
+- **Proporciones de Retratos**: Se ajustaron las tarjetas de liderazgo de las áreas a `aspect-square` y se limitó el ancho (`max-w-[680px]`) para asegurar que las fotos de los directores respeten las dimensiones verticales sin perder nitidez, con interacciones visuales (grayscale/brightness) replicadas de la maqueta original.
+- **Performance a 60fps (Rueda Orbital)**: Se reescribió la lógica de la animación de `AreasSection.tsx` para evitar cuellos de botella del ciclo de vida de React (`setState`). Ahora, `requestAnimationFrame` actualiza directamente el DOM a través de referencias (`useRef`), lo cual soluciona los problemas de latencia (saltos) permitiendo manipular los 360 grados sin problemas.
+- **Navegación Interactiva Mejorada**: Se añadió un sistema de "Shortest Path" o "Camino Más Corto". Ahora se puede hacer clic directamente en cualquier nodo del sistema orbital para que la rueda trace el ángulo más óptimo sin necesidad de usar las flechas. Además, el panel de detalles ahora respeta los micro-retrasos y las transiciones asíncronas de desvanecimiento ("fade out / in") para el cambio de área.
+
+## Datos de las Áreas
+
+El archivo `data/areasData.ts` ahora actúa como "Single Source of Truth", consolidando:
+
+-   Paths SVG extraídos del `data.js` del template original.
+-   Toda la información del área (descripción corta, listas "Qué realizamos" y "Qué buscamos").
+-   Detalle de los directores/líderes (fotos e hipervínculos).
+-   Las imágenes hero para las páginas de detalle.
+
+El frontend fue adaptado exitosamente del diseño estático al framework de React, respetando los guidelines de la marca.
