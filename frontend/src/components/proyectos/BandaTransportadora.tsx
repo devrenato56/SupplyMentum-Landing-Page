@@ -74,14 +74,14 @@ export default function BandaTransportadora() {
         container.scrollLeft += scrollSpeed;
       }
 
-      // 1. Calculamos el límite máximo de scroll a la derecha
-      const maxScrollLeft = container.scrollWidth - container.clientWidth;
-
-      // 2. Margen de anticipación: reinicia 150px ANTES de tocar el borde final absoluto
-      const offsetAnticipacion = 300;
-
-      if (container.scrollLeft >= maxScrollLeft - offsetAnticipacion) {
-        container.scrollLeft = 0; // Vuelve al inicio de la izquierda
+      // Continuous seamless loop logic
+      if (container.scrollWidth > container.clientWidth) {
+        const oneSetWidth = container.scrollWidth / 3;
+        if (container.scrollLeft >= oneSetWidth * 2) {
+          container.scrollLeft -= oneSetWidth;
+        } else if (container.scrollLeft <= 0) {
+          container.scrollLeft += oneSetWidth;
+        }
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -89,10 +89,19 @@ export default function BandaTransportadora() {
 
     animationFrameId = requestAnimationFrame(animate);
 
+    const onVisibility = () => {
+      cancelAnimationFrame(animationFrameId);
+      if (!document.hidden) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
       cancelAnimationFrame(animationFrameId);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [proyectos]);
+  }, []);
 
   // Drag-to-scroll mouse handlers for desktop
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -128,7 +137,6 @@ export default function BandaTransportadora() {
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUpOrLeave}
-          onMouseLeave={handleMouseUpOrLeave}
           onMouseEnter={() => {
             isPaused.current = true;
           }}

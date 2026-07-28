@@ -72,8 +72,17 @@ export default function ConstellationBackground() {
 
     render();
 
+    const onVisibility = () => {
+      cancelAnimationFrame(animationFrameId);
+      if (!document.hidden) {
+        animationFrameId = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", onVisibility);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
