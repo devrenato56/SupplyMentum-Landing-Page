@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Miembro {
   name: string;
@@ -71,6 +72,82 @@ const JUNTA_DIRECTIVA: Miembro[] = [
 ];
 
 export default function Conocenos() {
+  const railRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    let animationFrameId: number;
+    let lastTime = performance.now();
+    const speed = 36; // píxeles por segundo
+    let lastProgrammaticScrollLeft = rail.scrollLeft;
+    let isUserInteracting = false;
+    let resumeTimeout: NodeJS.Timeout;
+
+    // Calcula el punto de bucle exacto utilizando el desfase del primer elemento clonado
+    const getLimit = () => {
+      if (rail.children.length > JUNTA_DIRECTIVA.length) {
+        const firstClone = rail.children[JUNTA_DIRECTIVA.length] as HTMLElement;
+        const firstOrig = rail.children[0] as HTMLElement;
+        if (firstClone && firstOrig) {
+          return firstClone.offsetLeft - firstOrig.offsetLeft;
+        }
+      }
+      return rail.scrollWidth / 2;
+    };
+
+    const handleScroll = () => {
+      const currentScroll = rail.scrollLeft;
+      const diff = Math.abs(currentScroll - lastProgrammaticScrollLeft);
+      
+      // Si la diferencia es mayor a 2px, el scroll fue manual (arrastre de barra, rueda, etc.)
+      if (diff > 2) {
+        isUserInteracting = true;
+        clearTimeout(resumeTimeout);
+        resumeTimeout = setTimeout(() => {
+          isUserInteracting = false;
+          // Al reanudar, envolvemos de manera limpia e invisible si pasó el límite
+          const limit = getLimit();
+          if (rail.scrollLeft >= limit) {
+            rail.scrollLeft -= limit;
+          }
+          lastProgrammaticScrollLeft = rail.scrollLeft;
+          lastTime = performance.now();
+        }, 1500);
+      }
+    };
+
+    rail.addEventListener("scroll", handleScroll, { passive: true });
+
+    const step = (time: number) => {
+      const dt = (time - lastTime) / 1000;
+      lastTime = time;
+
+      if (!isUserInteracting) {
+        const limit = getLimit();
+        if (limit > 0) {
+          let newScroll = rail.scrollLeft + speed * dt;
+          if (newScroll >= limit) {
+            newScroll -= limit;
+          }
+          rail.scrollLeft = newScroll;
+          lastProgrammaticScrollLeft = rail.scrollLeft;
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(step);
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      clearTimeout(resumeTimeout);
+      rail.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="text-[#F5F4F2] min-h-screen font-sans bg-transparent">
       
@@ -99,7 +176,7 @@ export default function Conocenos() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
           {/* Misión Card */}
-          <div className="bg-[#131316] border border-[#26262A] border-l-[6px] border-l-[#ED1C24] p-10 rounded-r-lg transition-transform hover:scale-[1.01] duration-300">
+          <div className="bg-[#131316] border border-[#26262A] border-l-[6px] border-l-[#ED1C24] p-10 transition-transform hover:scale-[1.01] duration-300">
             <span className="text-[13px] tracking-[4px] text-[#ED1C24] font-extrabold block mb-4">
               MISIÓN
             </span>
@@ -109,7 +186,7 @@ export default function Conocenos() {
           </div>
 
           {/* Visión Card */}
-          <div className="bg-[#ED1C24] p-10 rounded-lg transition-transform hover:scale-[1.01] duration-300 shadow-xl shadow-[#ED1C24]/10">
+          <div className="bg-[#ED1C24] p-10 transition-transform hover:scale-[1.01] duration-300 shadow-xl shadow-[#ED1C24]/10">
             <span className="text-[13px] tracking-[4px] text-[#FFBD59] font-extrabold block mb-4">
               VISIÓN
             </span>
@@ -137,18 +214,21 @@ export default function Conocenos() {
         {/* Carrusel Marquee */}
         <div className="relative w-full">
           {/* Sombras difuminadas en los extremos del carrusel */}
-          <div className="absolute left-0 top-0 bottom-0 w-[120px] md:w-[240px] bg-gradient-to-r from-[#070709] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-[120px] md:w-[240px] bg-gradient-to-l from-[#070709] to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-[60px] md:w-[120px] bg-gradient-to-r from-[#070709] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-[60px] md:w-[120px] bg-gradient-to-l from-[#070709] to-transparent z-10 pointer-events-none" />
 
-          {/* Fila del Marquee (duplicamos los miembros para lograr scroll infinito continuo) */}
-          <div className="flex w-max animate-marquee-no-pause gap-6 px-4">
+          {/* Fila del Riel Autoscrollable */}
+          <div
+            ref={railRef}
+            className="flex w-full overflow-x-auto gap-6 px-6 md:px-12 pb-6 pt-2 rail-scrollbar select-none"
+          >
             {[...JUNTA_DIRECTIVA, ...JUNTA_DIRECTIVA].map((member, index) => (
               <div
                 key={index}
-                className="w-[300px] bg-[#121216] border border-[#22222a] flex-shrink-0 transition-transform duration-300 hover:scale-[1.01]"
+                className="w-[340px] md:w-[380px] bg-[#121216] border border-[#22222a] flex-shrink-0 transition-transform duration-300 hover:scale-[1.01]"
               >
                 {/* Contenedor de la Foto */}
-                <div className="relative h-[300px] w-full overflow-hidden border-b-3 border-b-[#ED1C24] group">
+                <div className="relative h-[340px] md:h-[380px] w-full overflow-hidden border-b-3 border-b-[#ED1C24] group">
                   <Image
                     src={member.img}
                     alt={member.name}
@@ -183,6 +263,35 @@ export default function Conocenos() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION - ¿Quieres formar parte? */}
+      <section className="relative py-24 text-center overflow-hidden bg-[#0A0A0B]/40 border-t border-[#131316]">
+        {/* Resplandor radial rojo de fondo */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(146,2,7,0.38),transparent_70%)] pointer-events-none z-0" />
+        
+        <div className="max-w-4xl mx-auto px-6 relative z-10">
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
+            ¿Quieres formar parte?
+          </h2>
+          <p className="text-sm md:text-base text-zinc-400 font-light max-w-xl mx-auto mb-10">
+            Revisa las áreas abiertas y postula a la convocatoria vigente.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center items-center">
+            <Link
+              href="/convocatoria"
+              className="px-8 py-4 bg-[#ED1C24] hover:bg-[#C4151C] text-white font-bold text-xs tracking-widest uppercase transition-all duration-300 shadow-lg shadow-[#ED1C24]/10 hover:shadow-[#ED1C24]/20"
+            >
+              Postula aquí
+            </Link>
+            <Link
+              href="/areas"
+              className="px-8 py-4 border border-zinc-800 hover:border-[#ED1C24] text-zinc-400 hover:text-[#ED1C24] font-bold text-xs tracking-widest uppercase transition-all duration-300 bg-transparent"
+            >
+              Ver las áreas
+            </Link>
           </div>
         </div>
       </section>

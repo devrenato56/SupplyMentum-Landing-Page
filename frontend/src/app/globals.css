@@ -45,6 +45,29 @@
   animation: marquee 35s linear infinite;
 }
 
+/* Custom rail scrollbar */
+.rail-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #22222a transparent;
+}
+
+.rail-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.rail-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rail-scrollbar::-webkit-scrollbar-thumb {
+  background: #22222a;
+  border-radius: 3px;
+}
+
+.rail-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ed1c24;
+}
+
 /* Text stroke matching exact screenshot: background fill + crisp dark grey stroke */
 .text-stroke-grey {
   -webkit-text-stroke: 1.5px #33333e;
