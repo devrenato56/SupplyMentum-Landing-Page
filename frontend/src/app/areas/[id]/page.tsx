@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { areasData } from "@/data/areasData";
 import AreaCTA from "@/components/areas/AreaCTA";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -33,6 +34,7 @@ export default async function AreaDetailPage({ params }: PageProps) {
 
   return (
     <div className="bg-[#0B0B0C] min-h-screen text-[#F5F4F2]">
+      <SmoothScroll />
       {/* Hero Section */}
       <section className="relative min-h-[56vh] flex items-end overflow-hidden">
         <img 
