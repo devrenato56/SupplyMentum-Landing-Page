@@ -7,6 +7,7 @@ import SearchAndFilters, { FilterType } from '../../components/SearchAndFilters'
 import { mockEvents } from '../../data/mockEvents';
 import SmoothScroll from '../../components/ui/SmoothScroll';
 import ConstellationBackground from '../../components/convocatoria/ConstellationBackground';
+import FaqAccordion from '../../components/FaqAccordion';
 
 export default function EventosPage() {
   const [filter, setFilter] = useState<FilterType>('TODOS');
@@ -114,11 +115,9 @@ export default function EventosPage() {
           </div>
         )}
 
-        {/* 4. Espacio reservado para Robert (Tarea 2.3) */}
-        <div className="mt-32 border-t border-gray-800 pt-16">
-          <p className="text-gray-500 text-center italic">
-            [ Espacio reservado para el componente FaqAccordion de Robert ]
-          </p>
+        {/* 4. Sección de Preguntas Frecuentes */}
+        <div className="mt-20">
+          <FaqAccordion />
         </div>
 
       </div>
