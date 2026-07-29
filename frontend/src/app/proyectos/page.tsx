@@ -2,7 +2,7 @@
 
 import ConstellationBackground from "@/components/convocatoria/ConstellationBackground";
 import BandaTransportadora from "@/components/proyectos/BandaTransportadora";
-import { Proyecto } from "@/components/proyectos/ProyectoCard";
+import ProyectosRacks from "@/components/proyectos/ProyectosRacks";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import { Archivo_Black, Archivo, Open_Sans } from "next/font/google";
 
@@ -71,6 +71,9 @@ export default function ProyectosPage() {
           </div>
         </div>
       </section>
+
+      {/* Sección Catálogo de Proyectos */}
+      <ProyectosRacks />
     </div>
   );
 }
