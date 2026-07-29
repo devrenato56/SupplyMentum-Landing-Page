@@ -1,6 +1,7 @@
 import AreasSection from "@/components/areas/AreasSection";
 import React from "react";
 import { areasData } from "@/data/areasData";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 
 export const metadata = {
   title: "Áreas - SupplyMentum UNI",
@@ -10,6 +11,7 @@ export const metadata = {
 export default function AreasPage() {
   return (
     <main>
+      <SmoothScroll />
       <AreasSection initialAreas={areasData} />
     </main>
   );
