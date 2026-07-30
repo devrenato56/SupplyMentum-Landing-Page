@@ -40,6 +40,35 @@
   animation-play-state: paused;
 }
 
+.animate-marquee-no-pause {
+  display: flex;
+  width: 200%;
+  animation: marquee 35s linear infinite;
+}
+
+/* Custom rail scrollbar */
+.rail-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #22222a transparent;
+}
+
+.rail-scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.rail-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rail-scrollbar::-webkit-scrollbar-thumb {
+  background: #22222a;
+  border-radius: 3px;
+}
+
+.rail-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ed1c24;
+}
+
 /* Conveyor belt animations */
 @keyframes conveyor-left {
   0% {
