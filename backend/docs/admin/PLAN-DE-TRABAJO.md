@@ -21,3 +21,10 @@
 * **Descripción de la tarea:**
   - Creación del endpoint protegido (`GET /api/admin/applicants`).
   - Conexión con el servicio de base de datos para recuperar la lista de candidatos con sus datos principales (nombre, apellido, correo electrónico, teléfono, carrera, semestre, áreas de interés seleccionadas, fecha de postulación y el motivo por el cual postulan).
+
+### 4. Cierre de sesión (Logout)
+
+* **Requerimiento:** Permitir el cierre de sesión de admin
+* **Descripción de la tarea:**
+  - Creación del endpoint protegido del dashboard (`POST /api/admin/logout`).
+  - Implementación del mecanismo de eliminación de la cookie una vez hecha la solicitud.
