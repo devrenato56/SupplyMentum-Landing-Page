@@ -6,6 +6,8 @@ import {
   UseGuards,
   Request,
   Res,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -30,6 +32,21 @@ export class AdminController {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 2 * 60 * 60 * 1000,
+    });
+
+    return {
+      message: 'success',
+    };
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  logout(@Res({ passthrough: true }) response: express.Response) {
+    response.clearCookie('admin_token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
     });
 
     return {
