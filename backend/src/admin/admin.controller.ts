@@ -32,7 +32,9 @@ export class AdminController {
       maxAge: 2 * 60 * 60 * 1000,
     });
 
-    return `Success`;
+    return {
+      message: 'success',
+    };
   }
 
   @UseGuards(JwtAuthGuard)
