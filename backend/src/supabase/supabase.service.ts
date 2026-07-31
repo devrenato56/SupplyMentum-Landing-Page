@@ -16,7 +16,8 @@ export class SupabaseService {
       throw new Error('Supabase credentials missing');
     }
 
-    this.supabaseClient = createClient(supabaseUrl,supabaseKey);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    this.supabaseClient = createClient(supabaseUrl, supabaseKey);
     this.logger.log('Successfully logged in on Supabase.');
   }
 
