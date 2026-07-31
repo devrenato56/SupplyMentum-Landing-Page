@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class ApplicationDto {
   @IsString()
@@ -11,6 +11,7 @@ export class ApplicationDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsEmail()
   readonly email: string;
 
   @IsString()
@@ -21,7 +22,7 @@ export class ApplicationDto {
   @IsNotEmpty()
   readonly career: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   readonly university_semester: number;
 
