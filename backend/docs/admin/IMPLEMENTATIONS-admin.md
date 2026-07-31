@@ -24,6 +24,9 @@ Maneja las peticiones HTTP destinadas al panel administrativo bajo el prefijo `/
 * **`GET /api/admin/applicants`**:
   - Ruta protegida con el guardia `JwtAuthGuard`.
   - Invoca a `AdminService.getApplicants()` para obtener el listado.
+* **`POST /api/admin/logout`**:
+  - Ruta protegida con el guardia `JwtAuthGuard`.
+  - Cierra la sesión actual de admin.
 
 ### 2. Servicios de Negocio
 
