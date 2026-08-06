@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -14,6 +15,7 @@ async function bootstrap() {
     }),
   );
 
+  app.use(cookieParser());
   const config = new DocumentBuilder()
     .setTitle('SupplyMentum CMS API')
     .setDescription('API for landing page content, applications, and admin access.')

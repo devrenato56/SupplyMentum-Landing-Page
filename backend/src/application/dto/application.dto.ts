@@ -1,3 +1,4 @@
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -15,6 +16,7 @@ export class ApplicationDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  @IsEmail()
   readonly email: string;
 
   @ApiProperty()
@@ -27,6 +29,7 @@ export class ApplicationDto {
   @IsNotEmpty()
   readonly career: string;
 
+  @IsNumber()
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -35,7 +38,7 @@ export class ApplicationDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  readonly university_semester: string;
+  readonly university_semester: number;
 
   @ApiProperty()
   @IsNumber()
