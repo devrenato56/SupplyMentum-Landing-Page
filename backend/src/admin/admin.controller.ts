@@ -21,6 +21,17 @@ export class AdminController {
     private adminService: AdminService,
   ) {}
 
+  @ApiOperation({ summary: 'Login for admin users' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['username', 'password'],
+      properties: {
+        username: { type: 'string' },
+        password: { type: 'string' },
+      },
+    },
+  })
   @Post('login')
   async login(
     @Body() body: { username: string; password: string },
@@ -54,6 +65,8 @@ export class AdminController {
     };
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Protected admin dashboard sample route' })
   @UseGuards(JwtAuthGuard)
   @Get('dashboard')
   getDashboardData(@Request() req) {

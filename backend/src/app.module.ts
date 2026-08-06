@@ -10,6 +10,7 @@ import { AdminController } from './admin/admin.controller';
 import { ApplicationController } from './application/application.controller';
 import { ApplicationService } from './application/application.service';
 import { AdminService } from './admin/admin.service';
+import { CmsModule } from './cms/cms.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AdminService } from './admin/admin.service';
     AuthModule,
     SupabaseModule,
     JwtModule,
+    CmsModule,
   ],
   controllers: [AppController, AdminController, ApplicationController],
   providers: [AppService, AuthService, ApplicationService, AdminService],
