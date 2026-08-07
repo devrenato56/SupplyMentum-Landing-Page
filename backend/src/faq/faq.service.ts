@@ -1,10 +1,16 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 import { FaqDto } from './dto/faq.dto';
 import { UpdateOrderDto } from './dto/updateOrder.dto';
 
 @Injectable()
 export class FaqService {
+  private readonly logger = new Logger(FaqService.name);
   constructor(private supabaseService: SupabaseService) {}
 
   async getFaq() {
@@ -14,10 +20,12 @@ export class FaqService {
       .select('id, pregunta, respuesta, orden')
       .order('orden', { ascending: true });
 
-    if (error)
+    if (error) {
+      this.logger.error(error);
       throw new InternalServerErrorException(
         'Error interno, intentar más tarde.',
       );
+    }
     return data;
   }
 
@@ -29,10 +37,12 @@ export class FaqService {
       .select('orden.max()')
       .single();
 
-    if (ordenError)
+    if (ordenError) {
+      this.logger.error(ordenError);
       throw new InternalServerErrorException(
         'Error obteniendo órdenes de la FAQ. Intente agregando manualmente un orden.',
       );
+    }
 
     const { data, error } = await supabase
       .from('faq')
@@ -46,10 +56,12 @@ export class FaqService {
       .select()
       .single();
 
-    if (error)
+    if (error) {
+      this.logger.error(error);
       throw new InternalServerErrorException(
         'Error, intentarlo de nuevo más tarde.',
       );
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return data;
@@ -68,6 +80,7 @@ export class FaqService {
     if (error) {
       if (error.code == 'PGRST116')
         throw new NotFoundException('FAQ ID no encontrado.');
+      this.logger.error(error);
       throw new InternalServerErrorException('Error, intentarlo más tarde.');
     }
 
@@ -86,6 +99,7 @@ export class FaqService {
     if (error) {
       if (error.code == 'PGRST116')
         throw new NotFoundException('FAQ ID no encontrado.');
+      this.logger.error(error);
       throw new InternalServerErrorException('Error, intentarlo más tarde.');
     }
   }
@@ -99,8 +113,10 @@ export class FaqService {
 
     //Observación: Importante resaltar que si se envían ids inválidos, simplemente no se agregarán las filas inválidas dado que no tienen la pregunta y la respuesta requerida.
     const { data, error } = await supabase.from('faq').upsert(dto).select();
-    if (error)
+    if (error) {
+      this.logger.error(error);
       throw new InternalServerErrorException('Error, intentarlo más tarde.');
+    }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return data;
   }
