@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { CmsModule } from './cms/cms.module';
 import { AreasModule } from './areas/areas.module';
 import { EventsModule } from './events/events.module';
+import { MembersModule } from './members/members.module';
 
 import { AdminController } from './admin/admin.controller';
 import { AdminService } from './admin/admin.service';
@@ -26,6 +27,7 @@ import { ApplicationService } from './application/application.service';
     CmsModule,
     AreasModule,
     EventsModule,
+    MembersModule,
   ],
   controllers: [AppController, AdminController, ApplicationController],
   providers: [AppService, AdminService, ApplicationService],
