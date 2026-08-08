@@ -8,6 +8,7 @@ import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
 import { CmsModule } from './cms/cms.module';
 import { AreasModule } from './areas/areas.module';
+import { EventsModule } from './events/events.module';
 
 import { AdminController } from './admin/admin.controller';
 import { AdminService } from './admin/admin.service';
@@ -24,6 +25,7 @@ import { ApplicationService } from './application/application.service';
     AuthModule,
     CmsModule,
     AreasModule,
+    EventsModule,
   ],
   controllers: [AppController, AdminController, ApplicationController],
   providers: [AppService, AdminService, ApplicationService],
