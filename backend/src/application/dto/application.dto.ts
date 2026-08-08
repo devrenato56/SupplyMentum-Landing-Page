@@ -1,57 +1,74 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ApplicationDto {
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Juan',
+  })
   @IsString()
   @IsNotEmpty()
-  readonly first_name: string;
+  readonly first_name!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Pérez',
+  })
   @IsString()
   @IsNotEmpty()
-  readonly last_name: string;
+  readonly last_name!: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
+  @ApiProperty({
+    example: 'juan.perez@example.com',
+  })
   @IsEmail()
-  readonly email: string;
+  @IsNotEmpty()
+  readonly email!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: '987654321',
+  })
   @IsString()
   @IsNotEmpty()
-  readonly phone: string;
+  readonly phone!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Ingeniería de Sistemas',
+  })
   @IsString()
   @IsNotEmpty()
-  readonly career: string;
+  readonly career!: string;
 
-  @IsNumber()
-  @ApiProperty()
+  @ApiProperty({
+    example: 1,
+  })
+  @IsInt()
+  readonly first_choice_area_id!: number;
+
+  @ApiProperty({
+    example: 'Universidad Nacional Mayor de San Marcos',
+  })
   @IsString()
   @IsNotEmpty()
-  readonly university: string;
+  readonly university!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: '8',
+  })
   @IsString()
   @IsNotEmpty()
-  readonly university_semester: number;
+  readonly university_semester!: string;
 
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  readonly first_choice_area_id: number;
-
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  readonly second_choice_area_id: number;
-
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Me interesa formar parte de la organización.',
+  })
   @IsString()
   @IsNotEmpty()
-  readonly application_reason: string;
+  readonly application_reason!: string;
+
+  @ApiPropertyOptional({
+    example: 2,
+    nullable: true,
+  })
+  @IsOptional()
+  @IsInt()
+  readonly second_choice_area_id?: number;
 }
