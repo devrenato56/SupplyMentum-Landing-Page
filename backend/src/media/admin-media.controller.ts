@@ -24,7 +24,7 @@ import { DeleteMediaDto } from './dto/delete-media.dto';
 import { UploadMediaDto } from './dto/upload-media.dto';
 import { MediaService } from './media.service';
 
-@ApiTags('Administración - Multimedia')
+@ApiTags('Admin - Multimedia')
 @ApiCookieAuth('admin_token')
 @UseGuards(JwtAuthGuard)
 @Controller('admin/media')
