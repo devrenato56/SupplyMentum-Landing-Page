@@ -1,56 +1,369 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
+# SupplyMentum Landing Page - Backend
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Server-side logic of SupplyMentum Landing Page built over [Nest](https://github.com/nestjs/nest)
 
 ## Project setup
-
+### npm configuration
 ```bash
 $ npm install
 ```
 
-## CMS foundation
+## CMS architecture
 
-This backend now includes a minimal CMS layer under `/api/cms` and `/admin/cms`.
+The backend includes a modular CMS API built with **NestJS** and **Supabase**. Structured content is managed through dedicated modules, while `cms_sections` remains available for flexible singleton content such as hero sections, mission, vision, contact information, or other page-level content.
 
-In Supabase, create these resources first:
+### Main CMS modules
 
-1. A `cms_sections` table with at least these columns:
-  - `section_key` text primary key
-  - `title` text null
-  - `payload` jsonb not null default `'{}'::jsonb`
-  - `updated_at` timestamptz null default now()
-2. A public storage bucket for images, for example `cms-assets`.
-3. A backend service key with permission to read/write the table and bucket. The current backend reads `SUPABASE_KEY`, so you can point that variable to the service role key.
+The current CMS is organized into the following modules:
 
-Recommended workflow:
+* `areas`: manages organization areas.
+* `roles`: manages organization roles and hierarchy.
+* `members`: manages directors and organization members.
+* `events`: manages events, registration status, featured events, and summaries.
+* `media`: manages image uploads and deletions using Supabase Storage.
+* `application`: manages applicant submissions.
+* `auth`: manages administrator authentication using JWT.
+* `supabase`: provides the shared Supabase client used by the services.
 
-- Upload images to the Supabase bucket.
-- Store the public file URL or path inside the `payload` JSON of each CMS section.
-- Use `PUT /admin/cms/:sectionKey` to update a section without touching frontend code.
+Each feature follows the NestJS structure:
 
+```text
+Controller
+   ↓
+Service
+   ↓
+SupabaseService
+   ↓
+Supabase
+```
+
+DTOs are used to validate incoming request data before it reaches the service layer.
+
+---
+
+### Supabase database resources
+
+The CMS currently works with the following main tables:
+
+#### `areas`
+
+Stores the organization's areas.
+
+Main fields:
+
+* `area_id`
+* `name`
+* `short_name`
+* `description`
+* `image_path`
+* `is_active`
+* `sort_order`
+* `created_at`
+* `updated_at`
+
+Inactive areas are kept in the database but are not returned by the public API.
+
+#### `roles`
+
+Stores organization roles independently from members so new roles can be added without changing backend code.
+
+Main fields:
+
+* `role_id`
+* `name`
+* `sort_order`
+* `is_active`
+* `created_at`
+* `updated_at`
+
+Examples include:
+
+* Presidente
+* Vicepresidente
+* Director
+* Subdirector
+
+#### `members`
+
+Stores organization members and their relationship with roles and areas.
+
+Main fields:
+
+* `member_id`
+* `full_name`
+* `role_id`
+* `area_id`
+* `description`
+* `image_path`
+* `linkedin_url`
+* `is_active`
+* `sort_order`
+* `created_at`
+* `updated_at`
+
+`role_id` references `roles.role_id`.
+
+`area_id` references `areas.area_id` and may be `null`, for example for organization-wide positions such as President.
+
+#### `events`
+
+Stores events displayed on the landing page.
+
+Main fields:
+
+* `event_id`
+* `title`
+* `description`
+* `location`
+* `image_path`
+* `registration_link`
+* `summary_link`
+* `start_date_time`
+* `is_active`
+* `starred`
+* `created_at`
+* `updated_at`
+
+For events, `is_active` means that registration is currently open.
+
+When `is_active = true`, a `registration_link` is required.
+
+Events are returned in the following order:
+
+1. Featured (`starred`) events.
+2. Active events ordered by closest start date.
+3. Inactive events ordered from newest to oldest.
+
+---
+
+### Public API
+
+Public endpoints are intended for the landing page and do not require administrator authentication.
+
+Examples:
+
+```text
+GET /api/areas
+GET /api/areas/:areaId
+
+GET /api/events
+GET /api/events/:eventId
+
+GET /api/members
+GET /api/members/:memberId
+```
+
+Public endpoints return only content that should be visible on the website.
+
+For example, inactive members and inactive areas are excluded.
+
+---
+
+### Administration API
+
+CMS administration routes are located under:
+
+```text
+/api/admin/*
+```
+
+and are protected with `JwtAuthGuard`.
+
+Examples:
+
+```text
+GET    /api/admin/areas
+POST   /api/admin/areas
+PATCH  /api/admin/areas/:areaId
+DELETE /api/admin/areas/:areaId
+
+GET    /api/admin/roles
+POST   /api/admin/roles
+PATCH  /api/admin/roles/:roleId
+DELETE /api/admin/roles/:roleId
+
+GET    /api/admin/members
+POST   /api/admin/members
+PATCH  /api/admin/members/:memberId
+DELETE /api/admin/members/:memberId
+
+GET    /api/admin/events
+POST   /api/admin/events
+PATCH  /api/admin/events/:eventId
+DELETE /api/admin/events/:eventId
+```
+
+Areas, roles, and members use logical deactivation where appropriate instead of immediately deleting related historical data.
+
+---
+
+### Administrator authentication
+
+Administrator routes are protected using JWT authentication.
+
+Authentication flow:
+
+```text
+Admin login
+   ↓
+Backend validates credentials
+   ↓
+JWT is generated
+   ↓
+JWT is stored in the `admin_token` HTTP-only cookie
+   ↓
+JwtAuthGuard protects `/api/admin/*`
+```
+
+Swagger is also configured to document the `admin_token` cookie authentication mechanism.
+
+---
+
+### Media and image management
+
+Images are stored in **Supabase Storage**, not directly inside PostgreSQL.
+
+Create a public bucket named:
+
+```text
+cms-media
+```
+
+The bucket uses logical folders such as:
+
+```text
+cms-media/
+├── areas/
+├── events/
+├── members/
+└── projects/
+```
+
+The database stores only the object path:
+
+```text
+members/550e8400-e29b-41d4-a716-446655440000.webp
+```
+
+instead of storing the entire public URL.
+
+The backend can generate the public URL from this path when required.
+
+Supported image formats:
+
+```text
+image/jpeg
+image/png
+image/webp
+```
+
+Maximum upload size:
+
+```text
+5 MB
+```
+
+Recommended production images should generally be optimized to considerably less than the maximum size.
+
+Media administration endpoints:
+
+```text
+POST   /api/admin/media
+DELETE /api/admin/media
+```
+
+The upload endpoint receives `multipart/form-data` containing:
+
+```text
+file
+resource
+```
+
+Valid resource values are:
+
+```text
+areas
+events
+members
+projects
+```
+
+The backend generates a UUID filename before uploading the file to Storage.
+
+Example result:
+
+```json
+{
+  "image_path": "members/550e8400-e29b-41d4-a716-446655440000.webp",
+  "image_url": "https://.../storage/v1/object/public/cms-media/members/550e8400-e29b-41d4-a716-446655440000.webp"
+}
+```
+
+The returned `image_path` can then be stored when creating or updating the related CMS entity.
+
+---
+
+### Storage security
+
+The `cms-media` bucket is public only because the landing page must be able to display its images.
+
+Public access is intended for reading files only.
+
+Uploads and deletions are performed through the NestJS backend:
+
+```text
+CMS frontend
+   ↓
+JWT-protected NestJS API
+   ↓
+MediaService
+   ↓
+Supabase service role
+   ↓
+Supabase Storage
+```
+
+No public `INSERT`, `UPDATE`, or `DELETE` Storage policies should be required for the CMS workflow.
+
+The Supabase service role key must remain exclusively in the backend environment and must never be exposed to frontend code.
+
+---
+
+
+### Swagger
+
+API documentation is available at:
+
+```text
+http://localhost:3001/docs
+```
+
+The backend API uses the global prefix:
+
+```text
+/api
+```
+
+Recommended local development configuration:
+
+```text
+Frontend: http://localhost:3000
+Backend:  http://localhost:3001
+API:      http://localhost:3001/api
+Swagger:  http://localhost:3001/docs
+```
+
+
+### Environment variables
+1. Create a .env file based on .env.example
+2. Complete the following:
+    * `SUPABASE_URL`: Public url for Supabase connection
+    * `SUPABASE_KEY`: Database's public anon key
+    * `JWT_SECRET`: A large random hexadecimal string. You can generate one using crypto in your command line:
+    ```bash
+   $ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   ```
 ## Compile and run the project
 
 ```bash
@@ -89,30 +402,3 @@ $ mau deploy
 ```
 
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
