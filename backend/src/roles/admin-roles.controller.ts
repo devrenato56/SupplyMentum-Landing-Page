@@ -10,9 +10,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBody,
   ApiCookieAuth,
   ApiOperation,
   ApiParam,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -28,8 +30,22 @@ export class AdminRolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @ApiOperation({
-    summary: 'Obtener todos los roles de la organización',
-    description: 'Retorna los roles activos e inactivos disponibles en el CMS.',
+    summary: 'Get all organization roles',
+    description: 'Returns active and inactive roles available in the CMS.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of roles returned successfully.',
+    schema: {
+      example: [
+        {
+          role_id: 1,
+          name: 'Director',
+          sort_order: 3,
+          is_active: true,
+        },
+      ],
+    },
   })
   @Get()
   findAll() {
@@ -37,13 +53,25 @@ export class AdminRolesController {
   }
 
   @ApiOperation({
-    summary: 'Obtener un rol por su identificador',
+    summary: 'Get a role by its ID',
   })
   @ApiParam({
     name: 'roleId',
-    description: 'Identificador del rol',
+    description: 'Role ID',
     type: Number,
     example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Role returned successfully.',
+    schema: {
+      example: {
+        role_id: 1,
+        name: 'Director',
+        sort_order: 3,
+        is_active: true,
+      },
+    },
   })
   @Get(':roleId')
   findOne(
@@ -54,7 +82,31 @@ export class AdminRolesController {
   }
 
   @ApiOperation({
-    summary: 'Crear un nuevo rol para la organización',
+    summary: 'Create a new role for the organization',
+  })
+  @ApiBody({
+    type: CreateRoleDto,
+    examples: {
+      example1: {
+        value: {
+          name: 'Director',
+          sort_order: 3,
+          is_active: true,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Role created successfully.',
+    schema: {
+      example: {
+        role_id: 1,
+        name: 'Director',
+        sort_order: 3,
+        is_active: true,
+      },
+    },
   })
   @Post()
   create(
@@ -65,13 +117,37 @@ export class AdminRolesController {
   }
 
   @ApiOperation({
-    summary: 'Actualizar los datos de un rol',
+    summary: 'Update role data',
   })
   @ApiParam({
     name: 'roleId',
-    description: 'Identificador del rol',
+    description: 'Role ID',
     type: Number,
     example: 1,
+  })
+  @ApiBody({
+    type: UpdateRoleDto,
+    examples: {
+      example1: {
+        value: {
+          name: 'Senior Director',
+          sort_order: 2,
+          is_active: true,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Role updated successfully.',
+    schema: {
+      example: {
+        role_id: 1,
+        name: 'Senior Director',
+        sort_order: 2,
+        is_active: true,
+      },
+    },
   })
   @Patch(':roleId')
   update(
@@ -84,13 +160,13 @@ export class AdminRolesController {
   }
 
   @ApiOperation({
-    summary: 'Desactivar un rol de la organización',
+    summary: 'Deactivate an organization role',
     description:
-      'Realiza una eliminación lógica estableciendo is_active en false.',
+      'Performs a logical deletion by setting is_active to false.',
   })
   @ApiParam({
     name: 'roleId',
-    description: 'Identificador del rol',
+    description: 'Role ID',
     type: Number,
     example: 1,
   })

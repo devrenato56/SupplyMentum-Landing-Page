@@ -10,9 +10,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBody,
   ApiCookieAuth,
   ApiOperation,
   ApiParam,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -28,8 +30,26 @@ export class AdminAreasController {
   constructor(private readonly areasService: AreasService) {}
 
   @ApiOperation({
-    summary: 'Obtener todas las áreas',
-    description: 'Retorna las áreas activas e inactivas para administración en el CMS.',
+    summary: 'Get all areas',
+    description: 'Returns both active and inactive areas for CMS administration.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of areas returned successfully.',
+    schema: {
+      example: [
+        {
+          area_id: 1,
+          name: 'Capital Humano y Excelencia',
+          short_name: 'CHE',
+          description:
+            'Area responsable del desarrollo del talento y la cultura organizacional.',
+          image_path: 'areas/capital-humano.webp',
+          is_active: true,
+          sort_order: 1,
+        },
+      ],
+    },
   })
   @Get()
   findAll() {
@@ -37,12 +57,28 @@ export class AdminAreasController {
   }
 
   @ApiOperation({
-    summary: 'Obtener área por ID',
+    summary: 'Get area by ID',
   })
   @ApiParam({
     name: 'areaId',
     type: Number,
     example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Area returned successfully.',
+    schema: {
+      example: {
+        area_id: 1,
+        name: 'Capital Humano y Excelencia',
+        short_name: 'CHE',
+        description:
+          'Area responsable del desarrollo del talento y la cultura organizacional.',
+        image_path: 'areas/capital-humano.webp',
+        is_active: true,
+        sort_order: 1,
+      },
+    },
   })
   @Get(':areaId')
   findOne(
@@ -53,7 +89,39 @@ export class AdminAreasController {
   }
 
   @ApiOperation({
-    summary: 'Crear un área',
+    summary: 'Create an area',
+  })
+  @ApiBody({
+    type: CreateAreaDto,
+    examples: {
+      example1: {
+        value: {
+          name: 'Capital Humano y Excelencia',
+          short_name: 'CHE',
+          description:
+            'Area responsable del desarrollo del talento y la cultura organizacional.',
+          image_path: 'areas/capital-humano.webp',
+          is_active: true,
+          sort_order: 1,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Area created successfully.',
+    schema: {
+      example: {
+        area_id: 1,
+        name: 'Capital Humano y Excelencia',
+        short_name: 'CHE',
+        description:
+          'Area responsable del desarrollo del talento y la cultura organizacional.',
+        image_path: 'areas/capital-humano.webp',
+        is_active: true,
+        sort_order: 1,
+      },
+    },
   })
   @Post()
   create(
@@ -64,12 +132,42 @@ export class AdminAreasController {
   }
 
   @ApiOperation({
-    summary: 'Actualizar un área',
+    summary: 'Update an area',
   })
   @ApiParam({
     name: 'areaId',
     type: Number,
     example: 1,
+  })
+  @ApiBody({
+    type: UpdateAreaDto,
+    examples: {
+      example1: {
+        value: {
+          name: 'Capital Humano y Excelencia',
+          description:
+            'Updated area description for talent development and organizational culture.',
+          is_active: true,
+          sort_order: 2,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Area updated successfully.',
+    schema: {
+      example: {
+        area_id: 1,
+        name: 'Capital Humano y Excelencia',
+        short_name: 'CHE',
+        description:
+          'Updated area description for talent development and organizational culture.',
+        image_path: 'areas/capital-humano.webp',
+        is_active: true,
+        sort_order: 2,
+      },
+    },
   })
   @Patch(':areaId')
   update(
@@ -82,8 +180,8 @@ export class AdminAreasController {
   }
 
   @ApiOperation({
-    summary: 'Desactivar un área',
-    description: 'Realiza una "eliminación" del área al dejarla como inactiva (is_active = false).',
+    summary: 'Deactivate an area',
+    description: 'Performs a logical deletion by deactivating the area (is_active = false).',
   })
   @ApiParam({
     name: 'areaId',

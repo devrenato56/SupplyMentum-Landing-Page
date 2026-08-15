@@ -12,7 +12,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateRoleDto {
   @ApiProperty({
-    description: 'Nombre del rol dentro de la organización',
+    description: 'Role name within the organization',
     example: 'Director',
   })
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
@@ -22,7 +22,7 @@ export class CreateRoleDto {
   readonly name!: string;
 
   @ApiPropertyOptional({
-    description: 'Orden jerárquico utilizado para mostrar los roles',
+    description: 'Hierarchical order used to display roles',
     example: 3,
     default: 0,
   })
@@ -32,7 +32,7 @@ export class CreateRoleDto {
   readonly sort_order?: number;
 
   @ApiPropertyOptional({
-    description: 'Indica si el rol puede utilizarse dentro de la organización',
+    description: 'Indicates whether the role can be used within the organization',
     example: true,
     default: true,
   })

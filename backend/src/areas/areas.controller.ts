@@ -8,8 +8,8 @@ export class AreasController {
   constructor(private readonly areasService: AreasService) {}
 
   @ApiOperation({
-    summary: 'Obtener áreas activas',
-    description: 'Retorna las áreas actualmente visibles en la landing page.',
+    summary: 'Get active areas',
+    description: 'Returns the areas currently visible on the landing page.',
   })
   @Get()
   findAll() {
@@ -17,7 +17,7 @@ export class AreasController {
   }
 
   @ApiOperation({
-    summary: 'Obtener un área activa por ID',
+    summary: 'Get an active area by ID',
   })
   @ApiParam({
     name: 'areaId',

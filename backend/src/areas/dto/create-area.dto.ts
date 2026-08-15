@@ -12,7 +12,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateAreaDto {
   @ApiProperty({
-    description: 'Nombre completo del área',
+    description: 'Full area name',
     example: 'Capital Humano y Excelencia',
   })
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
@@ -22,7 +22,7 @@ export class CreateAreaDto {
   readonly name!: string;
 
   @ApiPropertyOptional({
-    description: 'Nombre corto o abreviatura del área',
+    description: 'Short name or abbreviation for the area',
     example: 'CHE',
   })
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
@@ -33,9 +33,9 @@ export class CreateAreaDto {
   readonly short_name?: string;
 
   @ApiPropertyOptional({
-    description: 'Descripción del área que puede mostrarse en la landing',
+    description: 'Area description that may be displayed on the landing page',
     example:
-      'Área encargada del desarrollo del talento y la cultura organizacional.',
+      'Area responsable del desarrollo del talento y la cultura organizacional.',
   })
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsOptional()
@@ -44,7 +44,7 @@ export class CreateAreaDto {
   readonly description?: string;
 
   @ApiPropertyOptional({
-    description: 'Ruta de la imagen asociada al área en Supabase Storage',
+    description: 'Path of the image associated with the area in Supabase Storage',
     example: 'areas/capital-humano.webp',
   })
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
@@ -54,7 +54,7 @@ export class CreateAreaDto {
   readonly image_path?: string;
 
   @ApiPropertyOptional({
-    description: 'Determina si el área se encuentra visible en la landing',
+    description: 'Determines whether the area is visible on the landing page',
     example: true,
     default: true,
   })
@@ -63,7 +63,7 @@ export class CreateAreaDto {
   readonly is_active?: boolean;
 
   @ApiPropertyOptional({
-    description: 'Orden en el que el área será mostrada en la landing',
+    description: 'Display order of the area on the landing page',
     example: 1,
     default: 0,
   })

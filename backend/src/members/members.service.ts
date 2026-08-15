@@ -256,7 +256,7 @@ export class MembersService {
   }
 
   /**
-   * Obtiene cualquier miembro mediante su identificador.
+   * Obtiene cualquier miembro mediante su ID.
    */
   async findAdminOne(memberId: number): Promise<MemberRecord> {
     const supabase = this.supabaseService.getClient();

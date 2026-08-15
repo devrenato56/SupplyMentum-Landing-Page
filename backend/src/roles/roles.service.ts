@@ -59,7 +59,7 @@ export class RolesService {
   }
 
   /**
-   * Obtiene un rol mediante su identificador.
+   * Obtiene un rol mediante su ID.
    */
   async findOne(roleId: number): Promise<RoleRecord> {
     const supabase = this.supabaseService.getClient();

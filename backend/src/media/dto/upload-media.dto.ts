@@ -12,7 +12,7 @@ export type MediaResource = (typeof MEDIA_RESOURCES)[number];
 
 export class UploadMediaDto {
   @ApiProperty({
-    description: 'Tipo de recurso al que pertenecerá la imagen',
+    description: 'Resource type the image belongs to',
     example: 'members',
     enum: MEDIA_RESOURCES,
   })

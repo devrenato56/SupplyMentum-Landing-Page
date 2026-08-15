@@ -13,7 +13,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateMemberDto {
   @ApiProperty({
-    description: 'Nombre completo del miembro',
+    description: 'Full member name',
     example: 'Johan Osores',
   })
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
@@ -24,7 +24,7 @@ export class CreateMemberDto {
 
   @ApiProperty({
     description:
-      'Identificador del rol que ocupa el miembro dentro de la organización',
+      'ID of the role held by the member within the organization',
     example: 3,
   })
   @IsInt()
@@ -33,7 +33,7 @@ export class CreateMemberDto {
 
   @ApiPropertyOptional({
     description:
-      'Identificador del área a la que pertenece el miembro. Puede ser nulo.',
+      'ID of the area the member belongs to. Can be null.',
     example: 1,
     nullable: true,
   })
@@ -43,8 +43,8 @@ export class CreateMemberDto {
   readonly area_id?: number | null;
 
   @ApiPropertyOptional({
-    description: 'Descripción o presentación breve del miembro',
-    example: 'Director de Marketing y CRM de SupplyMentum.',
+    description: 'Short description or introduction for the member',
+    example: 'Marketing and CRM Director at SupplyMentum.',
     nullable: true,
   })
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
@@ -54,7 +54,7 @@ export class CreateMemberDto {
   readonly description?: string | null;
 
   @ApiPropertyOptional({
-    description: 'Ruta de la fotografía del miembro dentro de Supabase Storage',
+    description: 'Path to the member photo within Supabase Storage',
     example: 'members/johan-osores.webp',
     nullable: true,
   })
@@ -65,7 +65,7 @@ export class CreateMemberDto {
   readonly image_path?: string | null;
 
   @ApiPropertyOptional({
-    description: 'Enlace al perfil de LinkedIn del miembro',
+    description: 'LinkedIn profile URL for the member',
     example: 'https://www.linkedin.com/in/usuario',
     nullable: true,
   })
@@ -79,7 +79,7 @@ export class CreateMemberDto {
 
   @ApiPropertyOptional({
     description:
-      'Indica si el miembro debe mostrarse públicamente en la landing',
+      'Indicates whether the member should be shown publicly on the landing page',
     example: true,
     default: true,
   })
@@ -88,7 +88,7 @@ export class CreateMemberDto {
   readonly is_active?: boolean;
 
   @ApiPropertyOptional({
-    description: 'Orden de presentación del miembro dentro de su jerarquía',
+    description: 'Display order of the member within their hierarchy',
     example: 1,
     default: 0,
   })

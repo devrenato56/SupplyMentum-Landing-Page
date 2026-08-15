@@ -8,7 +8,6 @@ import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
 import { CmsModule } from './cms/cms.module';
 import { AreasModule } from './areas/areas.module';
-import { EventsModule } from './events/events.module';
 import { MembersModule } from './members/members.module';
 import { RolesModule } from './roles/roles.module';
 import { MediaModule } from './media/media.module';
@@ -28,7 +27,6 @@ import { ApplicationService } from './application/application.service';
     AuthModule,
     CmsModule,
     AreasModule,
-    EventsModule,
     MembersModule,
     RolesModule,
     MediaModule,

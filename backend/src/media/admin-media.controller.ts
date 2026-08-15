@@ -14,6 +14,7 @@ import {
   ApiConsumes,
   ApiCookieAuth,
   ApiOperation,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -32,9 +33,9 @@ export class AdminMediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @ApiOperation({
-    summary: 'Subir una imagen al almacenamiento del CMS',
+    summary: 'Upload an image to CMS storage',
     description:
-      'Sube una imagen JPEG, PNG o WebP a Supabase Storage y devuelve su ruta y URL pública.',
+      'Uploads a JPEG, PNG, or WebP image to Supabase Storage and returns its path and public URL.',
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -45,14 +46,25 @@ export class AdminMediaController {
         file: {
           type: 'string',
           format: 'binary',
-          description: 'Imagen que se desea subir',
+          description: 'Image to upload',
         },
         resource: {
           type: 'string',
           enum: ['areas', 'events', 'members', 'projects'],
-          description: 'Tipo de recurso al que pertenece la imagen',
+          description: 'Type of resource the image belongs to',
           example: 'members',
         },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Image uploaded successfully.',
+    schema: {
+      example: {
+        image_path: 'members/3d9d5fe5-7c4a-4d17-bfe9-242af161ef2b.webp',
+        image_url:
+          'https://xyz.supabase.co/storage/v1/object/public/cms-media/members/3d9d5fe5-7c4a-4d17-bfe9-242af161ef2b.webp',
       },
     },
   })
@@ -82,9 +94,29 @@ export class AdminMediaController {
   }
 
   @ApiOperation({
-    summary: 'Eliminar una imagen del almacenamiento del CMS',
+    summary: 'Delete an image from CMS storage',
     description:
-      'Elimina una imagen almacenada dentro del bucket de contenido multimedia.',
+      'Deletes an image stored in the multimedia content bucket.',
+  })
+  @ApiBody({
+    type: DeleteMediaDto,
+    examples: {
+      example1: {
+        value: {
+          image_path: 'members/johan-osores.webp',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Image deleted successfully.',
+    schema: {
+      example: {
+        message: 'Image deleted successfully',
+        image_path: 'members/johan-osores.webp',
+      },
+    },
   })
   @Delete()
   remove(

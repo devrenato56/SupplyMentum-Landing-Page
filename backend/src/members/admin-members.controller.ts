@@ -1,5 +1,5 @@
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MembersService } from './members.service';
 
 @ApiTags('Miembros')
@@ -8,9 +8,36 @@ export class AdminMembersController {
   constructor(private readonly membersService: MembersService) {}
 
   @ApiOperation({
-    summary: 'Obtener los miembros visibles de la organización',
+    summary: 'Get visible organization members',
     description:
-      'Retorna los miembros activos ordenados según la jerarquía de su rol y su orden de presentación.',
+      'Returns active members ordered by role hierarchy and display order.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of visible members returned successfully.',
+    schema: {
+      example: [
+        {
+          member_id: 1,
+          full_name: 'Johan Osores',
+          role_id: 3,
+          role: {
+            role_id: 3,
+            name: 'Director',
+          },
+          area_id: 1,
+          area: {
+            area_id: 1,
+            name: 'Capital Humano y Excelencia',
+          },
+          description: 'Marketing and CRM Director at SupplyMentum.',
+          image_path: 'members/johan-osores.webp',
+          linkedin_url: 'https://www.linkedin.com/in/usuario',
+          is_active: true,
+          sort_order: 1,
+        },
+      ],
+    },
   })
   @Get()
   findAll() {
@@ -18,13 +45,38 @@ export class AdminMembersController {
   }
 
   @ApiOperation({
-    summary: 'Obtener un miembro visible por su identificador',
+    summary: 'Get a visible member by ID',
   })
   @ApiParam({
     name: 'memberId',
-    description: 'Identificador del miembro',
+    description: 'Member ID',
     type: Number,
     example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Member returned successfully.',
+    schema: {
+      example: {
+        member_id: 1,
+        full_name: 'Johan Osores',
+        role_id: 3,
+        role: {
+          role_id: 3,
+          name: 'Director',
+        },
+        area_id: 1,
+        area: {
+          area_id: 1,
+          name: 'Capital Humano y Excelencia',
+        },
+        description: 'Marketing and CRM Director at SupplyMentum.',
+        image_path: 'members/johan-osores.webp',
+        linkedin_url: 'https://www.linkedin.com/in/usuario',
+        is_active: true,
+        sort_order: 1,
+      },
+    },
   })
   @Get(':memberId')
   findOne(
