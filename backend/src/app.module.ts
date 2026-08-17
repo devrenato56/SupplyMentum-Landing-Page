@@ -6,7 +6,6 @@ import { AppService } from './app.service';
 
 import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
-import { CmsModule } from './cms/cms.module';
 import { AreasModule } from './areas/areas.module';
 import { MembersModule } from './members/members.module';
 import { RolesModule } from './roles/roles.module';
@@ -25,7 +24,6 @@ import { ApplicationService } from './application/application.service';
     }),
     SupabaseModule,
     AuthModule,
-    CmsModule,
     AreasModule,
     MembersModule,
     RolesModule,
