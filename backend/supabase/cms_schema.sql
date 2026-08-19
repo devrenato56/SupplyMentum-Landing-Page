@@ -156,8 +156,8 @@ values
     }'::jsonb
   ),
   (
-    'board_members',
-    'Miembros de la junta',
+    'board_executives',
+    'Directivos de la junta',
     '{
       "items": []
     }'::jsonb

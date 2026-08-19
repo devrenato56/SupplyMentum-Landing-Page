@@ -6,24 +6,24 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
-import { CreateMemberDto } from './dto/create-member.dto';
-import { UpdateMemberDto } from './dto/update-member.dto';
+import { CreateExecutiveDto } from './dto/create-executive.dto';
+import { UpdateExecutiveDto } from './dto/update-executive.dto';
 
-export interface MemberRole {
+export interface ExecutiveRole {
   role_id: number;
   name: string;
   sort_order: number;
   is_active: boolean;
 }
 
-export interface MemberArea {
+export interface ExecutiveArea {
   area_id: number;
   name: string;
   short_name: string | null;
 }
 
-export interface MemberRecord {
-  member_id: number;
+export interface ExecutiveRecord {
+  executive_id: number;
   full_name: string;
   role_id: number;
   area_id: number | null;
@@ -34,16 +34,16 @@ export interface MemberRecord {
   sort_order: number;
   created_at?: string;
   updated_at?: string;
-  role?: MemberRole | null;
-  area?: MemberArea | null;
+  role?: ExecutiveRole | null;
+  area?: ExecutiveArea | null;
 }
 
 @Injectable()
-export class MembersService {
-  private readonly tableName = 'members';
+export class ExecutivesService {
+  private readonly tableName = 'executives';
 
   private readonly publicColumns = `
-    member_id,
+    executive_id,
     full_name,
     role_id,
     area_id,
@@ -65,7 +65,7 @@ export class MembersService {
   `;
 
   private readonly adminColumns = `
-    member_id,
+    executive_id,
     full_name,
     role_id,
     area_id,
@@ -92,11 +92,11 @@ export class MembersService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
   /**
-   * Ordena los miembros según la jerarquía del rol
-   * y posteriormente por el orden individual del miembro.
+   * Ordena los directivos según la jerarquía del rol
+   * y posteriormente por el orden individual del directivo.
    */
-  private sortMembers(members: MemberRecord[]): MemberRecord[] {
-    return [...members].sort((a, b) => {
+  private sortExecutives(executives: ExecutiveRecord[]): ExecutiveRecord[] {
+    return [...executives].sort((a, b) => {
       const roleOrderA = a.role?.sort_order ?? Number.MAX_SAFE_INTEGER;
 
       const roleOrderB = b.role?.sort_order ?? Number.MAX_SAFE_INTEGER;
@@ -109,7 +109,7 @@ export class MembersService {
         return a.sort_order - b.sort_order;
       }
 
-      return a.member_id - b.member_id;
+      return a.executive_id - b.executive_id;
     });
   }
 
@@ -172,7 +172,7 @@ export class MembersService {
   }
 
   /**
-   * Obtiene los miembros visibles en la landing.
+   * Obtiene los directivos visibles en la landing.
    */
   async findPublicAll() {
     const supabase = this.supabaseService.getClient();
@@ -184,57 +184,57 @@ export class MembersService {
 
     if (error) {
       throw new InternalServerErrorException(
-        `No se pudieron obtener los miembros: ${error.message}`,
+        `No se pudieron obtener los directivos: ${error.message}`,
       );
     }
 
-    const members = (data ?? []) as unknown as MemberRecord[];
+    const executives = (data ?? []) as unknown as ExecutiveRecord[];
 
-    const visibleMembers = members.filter(
-      (member) => member.role && member.role.is_active,
+    const visibleExecutives = executives.filter(
+      (executive) => executive.role && executive.role.is_active,
     );
 
-    return this.sortMembers(visibleMembers);
+    return this.sortExecutives(visibleExecutives);
   }
 
   /**
-   * Obtiene un miembro activo para la landing.
+   * Obtiene un directivo activo para la landing.
    */
-  async findPublicOne(memberId: number): Promise<MemberRecord> {
+  async findPublicOne(executiveId: number): Promise<ExecutiveRecord> {
     const supabase = this.supabaseService.getClient();
 
     const { data, error } = await supabase
       .from(this.tableName)
       .select(this.publicColumns)
-      .eq('member_id', memberId)
+      .eq('executive_id', executiveId)
       .eq('is_active', true)
       .maybeSingle();
 
     if (error) {
       throw new InternalServerErrorException(
-        `No se pudo obtener el miembro: ${error.message}`,
+        `No se pudo obtener el directivo: ${error.message}`,
       );
     }
 
     if (!data) {
       throw new NotFoundException(
-        `No existe un miembro activo con el ID ${memberId}`,
+        `No existe un directivo activo con el ID ${executiveId}`,
       );
     }
 
-    const member = data as unknown as MemberRecord;
+    const executive = data as unknown as ExecutiveRecord;
 
-    if (!member.role?.is_active) {
+    if (!executive.role?.is_active) {
       throw new NotFoundException(
-        `No existe un miembro activo con el ID ${memberId}`,
+        `No existe un directivo activo con el ID ${executiveId}`,
       );
     }
 
-    return member;
+    return executive;
   }
 
   /**
-   * Obtiene todos los miembros para el CMS,
+   * Obtiene todos los directivos para el CMS,
    * incluyendo los desactivados.
    */
   async findAdminAll() {
@@ -246,51 +246,51 @@ export class MembersService {
 
     if (error) {
       throw new InternalServerErrorException(
-        `No se pudieron obtener los miembros: ${error.message}`,
+        `No se pudieron obtener los directivos: ${error.message}`,
       );
     }
 
-    const members = (data ?? []) as unknown as MemberRecord[];
+    const executives = (data ?? []) as unknown as ExecutiveRecord[];
 
-    return this.sortMembers(members);
+    return this.sortExecutives(executives);
   }
 
   /**
-   * Obtiene cualquier miembro mediante su ID.
+   * Obtiene cualquier directivo mediante su ID.
    */
-  async findAdminOne(memberId: number): Promise<MemberRecord> {
+  async findAdminOne(executiveId: number): Promise<ExecutiveRecord> {
     const supabase = this.supabaseService.getClient();
 
     const { data, error } = await supabase
       .from(this.tableName)
       .select(this.adminColumns)
-      .eq('member_id', memberId)
+      .eq('executive_id', executiveId)
       .maybeSingle();
 
     if (error) {
       throw new InternalServerErrorException(
-        `No se pudo obtener el miembro: ${error.message}`,
+        `No se pudo obtener el directivo: ${error.message}`,
       );
     }
 
     if (!data) {
-      throw new NotFoundException(`No existe un miembro con el ID ${memberId}`);
+      throw new NotFoundException(`No existe un directivo con el ID ${executiveId}`);
     }
 
-    return data as unknown as MemberRecord;
+    return data as unknown as ExecutiveRecord;
   }
 
   /**
-   * Crea un nuevo miembro.
+   * Crea un nuevo directivo.
    */
-  async create(createMemberDto: CreateMemberDto) {
-    await this.validateRole(createMemberDto.role_id);
+  async create(createExecutiveDto: CreateExecutiveDto) {
+    await this.validateRole(createExecutiveDto.role_id);
 
     if (
-      createMemberDto.area_id !== undefined &&
-      createMemberDto.area_id !== null
+      createExecutiveDto.area_id !== undefined &&
+      createExecutiveDto.area_id !== null
     ) {
-      await this.validateArea(createMemberDto.area_id);
+      await this.validateArea(createExecutiveDto.area_id);
     }
 
     const supabase = this.supabaseService.getClient();
@@ -298,21 +298,21 @@ export class MembersService {
     const { data, error } = await supabase
       .from(this.tableName)
       .insert({
-        full_name: createMemberDto.full_name,
-        role_id: createMemberDto.role_id,
-        area_id: createMemberDto.area_id ?? null,
-        description: createMemberDto.description ?? null,
-        image_path: createMemberDto.image_path ?? null,
-        linkedin_url: createMemberDto.linkedin_url ?? null,
-        is_active: createMemberDto.is_active ?? true,
-        sort_order: createMemberDto.sort_order ?? 0,
+        full_name: createExecutiveDto.full_name,
+        role_id: createExecutiveDto.role_id,
+        area_id: createExecutiveDto.area_id ?? null,
+        description: createExecutiveDto.description ?? null,
+        image_path: createExecutiveDto.image_path ?? null,
+        linkedin_url: createExecutiveDto.linkedin_url ?? null,
+        is_active: createExecutiveDto.is_active ?? true,
+        sort_order: createExecutiveDto.sort_order ?? 0,
       })
       .select(this.adminColumns)
       .single();
 
     if (error) {
       if (error.code === '23505') {
-        throw new ConflictException('Ya existe un miembro con esos datos');
+        throw new ConflictException('Ya existe un directivo con esos datos');
       }
 
       if (error.code === '23503') {
@@ -322,7 +322,7 @@ export class MembersService {
       }
 
       throw new InternalServerErrorException(
-        `No se pudo crear el miembro: ${error.message}`,
+        `No se pudo crear el directivo: ${error.message}`,
       );
     }
 
@@ -330,54 +330,54 @@ export class MembersService {
   }
 
   /**
-   * Actualiza parcialmente un miembro existente.
+   * Actualiza parcialmente un directivo existente.
    */
-  async update(memberId: number, updateMemberDto: UpdateMemberDto) {
-    await this.findAdminOne(memberId);
+  async update(executiveId: number, updateExecutiveDto: UpdateExecutiveDto) {
+    await this.findAdminOne(executiveId);
 
-    if (updateMemberDto.role_id !== undefined) {
-      await this.validateRole(updateMemberDto.role_id);
+    if (updateExecutiveDto.role_id !== undefined) {
+      await this.validateRole(updateExecutiveDto.role_id);
     }
 
     if (
-      updateMemberDto.area_id !== undefined &&
-      updateMemberDto.area_id !== null
+      updateExecutiveDto.area_id !== undefined &&
+      updateExecutiveDto.area_id !== null
     ) {
-      await this.validateArea(updateMemberDto.area_id);
+      await this.validateArea(updateExecutiveDto.area_id);
     }
 
     const updateData: Record<string, unknown> = {};
 
-    if (updateMemberDto.full_name !== undefined) {
-      updateData.full_name = updateMemberDto.full_name;
+    if (updateExecutiveDto.full_name !== undefined) {
+      updateData.full_name = updateExecutiveDto.full_name;
     }
 
-    if (updateMemberDto.role_id !== undefined) {
-      updateData.role_id = updateMemberDto.role_id;
+    if (updateExecutiveDto.role_id !== undefined) {
+      updateData.role_id = updateExecutiveDto.role_id;
     }
 
-    if (updateMemberDto.area_id !== undefined) {
-      updateData.area_id = updateMemberDto.area_id;
+    if (updateExecutiveDto.area_id !== undefined) {
+      updateData.area_id = updateExecutiveDto.area_id;
     }
 
-    if (updateMemberDto.description !== undefined) {
-      updateData.description = updateMemberDto.description;
+    if (updateExecutiveDto.description !== undefined) {
+      updateData.description = updateExecutiveDto.description;
     }
 
-    if (updateMemberDto.image_path !== undefined) {
-      updateData.image_path = updateMemberDto.image_path;
+    if (updateExecutiveDto.image_path !== undefined) {
+      updateData.image_path = updateExecutiveDto.image_path;
     }
 
-    if (updateMemberDto.linkedin_url !== undefined) {
-      updateData.linkedin_url = updateMemberDto.linkedin_url;
+    if (updateExecutiveDto.linkedin_url !== undefined) {
+      updateData.linkedin_url = updateExecutiveDto.linkedin_url;
     }
 
-    if (updateMemberDto.is_active !== undefined) {
-      updateData.is_active = updateMemberDto.is_active;
+    if (updateExecutiveDto.is_active !== undefined) {
+      updateData.is_active = updateExecutiveDto.is_active;
     }
 
-    if (updateMemberDto.sort_order !== undefined) {
-      updateData.sort_order = updateMemberDto.sort_order;
+    if (updateExecutiveDto.sort_order !== undefined) {
+      updateData.sort_order = updateExecutiveDto.sort_order;
     }
 
     if (Object.keys(updateData).length === 0) {
@@ -391,13 +391,13 @@ export class MembersService {
     const { data, error } = await supabase
       .from(this.tableName)
       .update(updateData)
-      .eq('member_id', memberId)
+      .eq('executive_id', executiveId)
       .select(this.adminColumns)
       .single();
 
     if (error) {
       if (error.code === '23505') {
-        throw new ConflictException('Ya existe un miembro con esos datos');
+        throw new ConflictException('Ya existe un directivo con esos datos');
       }
 
       if (error.code === '23503') {
@@ -407,7 +407,7 @@ export class MembersService {
       }
 
       throw new InternalServerErrorException(
-        `No se pudo actualizar el miembro: ${error.message}`,
+        `No se pudo actualizar el directivo: ${error.message}`,
       );
     }
 
@@ -415,10 +415,10 @@ export class MembersService {
   }
 
   /**
-   * Desactiva un miembro sin eliminarlo físicamente.
+   * Desactiva un directivo sin eliminarlo físicamente.
    */
-  async remove(memberId: number) {
-    await this.findAdminOne(memberId);
+  async remove(executiveId: number) {
+    await this.findAdminOne(executiveId);
 
     const supabase = this.supabaseService.getClient();
 
@@ -427,19 +427,19 @@ export class MembersService {
       .update({
         is_active: false,
       })
-      .eq('member_id', memberId)
+      .eq('executive_id', executiveId)
       .select(this.adminColumns)
       .single();
 
     if (error) {
       throw new InternalServerErrorException(
-        `No se pudo desactivar el miembro: ${error.message}`,
+        `No se pudo desactivar el directivo: ${error.message}`,
       );
     }
 
     return {
-      message: 'Miembro desactivado correctamente',
-      member: data,
+      message: 'Directivo desactivado correctamente',
+      executive: data,
     };
   }
 }

@@ -222,7 +222,7 @@ export default function Conocenos() {
             ref={railRef}
             className="flex w-full overflow-x-auto gap-6 px-6 md:px-12 pb-6 pt-2 rail-scrollbar select-none"
           >
-            {[...JUNTA_DIRECTIVA, ...JUNTA_DIRECTIVA].map((member, index) => (
+            {[...JUNTA_DIRECTIVA, ...JUNTA_DIRECTIVA].map((executive, index) => (
               <div
                 key={index}
                 className="w-[340px] md:w-[380px] bg-[#121216] border border-[#22222a] flex-shrink-0 transition-transform duration-300 hover:scale-[1.01]"
@@ -230,14 +230,14 @@ export default function Conocenos() {
                 {/* Contenedor de la Foto */}
                 <div className="relative h-[340px] md:h-[380px] w-full overflow-hidden border-b-3 border-b-[#ED1C24] group">
                   <Image
-                    src={member.img}
-                    alt={member.name}
+                    src={executive.img}
+                    alt={executive.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105 filter grayscale-[35%] brightness-[85%] group-hover:grayscale-0 group-hover:brightness-100"
                   />
                   {/* Botón de LinkedIn en la esquina superior derecha */}
                   <a
-                    href={member.linkedin}
+                    href={executive.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                     title="LinkedIn"
@@ -252,13 +252,13 @@ export default function Conocenos() {
                 {/* Detalles del Miembro */}
                 <div className="p-6">
                   <div className="text-[17px] font-bold text-white tracking-wide">
-                    {member.name}
+                    {executive.name}
                   </div>
                   <div className="text-[12px] tracking-[1.5px] text-[#ED1C24] font-bold mt-2 uppercase">
-                    {member.role}
+                    {executive.role}
                   </div>
                   <p className="text-[13px] text-[#9B9AA0] font-light leading-[1.6] mt-4 min-h-[72px]">
-                    {member.desc}
+                    {executive.desc}
                   </p>
                 </div>
               </div>

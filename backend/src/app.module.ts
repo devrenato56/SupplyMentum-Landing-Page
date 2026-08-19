@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
 import { AreasModule } from './areas/areas.module';
-import { MembersModule } from './members/members.module';
+import { ExecutivesModule } from './executives/executives.module';
 import { RolesModule } from './roles/roles.module';
 import { MediaModule } from './media/media.module';
 
@@ -25,7 +25,7 @@ import { ApplicationService } from './application/application.service';
     SupabaseModule,
     AuthModule,
     AreasModule,
-    MembersModule,
+    ExecutivesModule,
     RolesModule,
     MediaModule,
   ],

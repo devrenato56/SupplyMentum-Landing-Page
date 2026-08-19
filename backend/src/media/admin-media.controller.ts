@@ -50,9 +50,9 @@ export class AdminMediaController {
         },
         resource: {
           type: 'string',
-          enum: ['areas', 'events', 'members', 'projects'],
+          enum: ['areas', 'events', 'executives', 'projects'],
           description: 'Type of resource the image belongs to',
-          example: 'members',
+          example: 'executives',
         },
       },
     },
@@ -62,9 +62,9 @@ export class AdminMediaController {
     description: 'Image uploaded successfully.',
     schema: {
       example: {
-        image_path: 'members/3d9d5fe5-7c4a-4d17-bfe9-242af161ef2b.webp',
+        image_path: 'executives/3d9d5fe5-7c4a-4d17-bfe9-242af161ef2b.webp',
         image_url:
-          'https://xyz.supabase.co/storage/v1/object/public/cms-media/members/3d9d5fe5-7c4a-4d17-bfe9-242af161ef2b.webp',
+          'https://xyz.supabase.co/storage/v1/object/public/cms-media/executives/3d9d5fe5-7c4a-4d17-bfe9-242af161ef2b.webp',
       },
     },
   })
@@ -103,7 +103,7 @@ export class AdminMediaController {
     examples: {
       example1: {
         value: {
-          image_path: 'members/johan-osores.webp',
+          image_path: 'executives/johan-osores.webp',
         },
       },
     },
@@ -114,7 +114,7 @@ export class AdminMediaController {
     schema: {
       example: {
         message: 'Image deleted successfully',
-        image_path: 'members/johan-osores.webp',
+        image_path: 'executives/johan-osores.webp',
       },
     },
   })

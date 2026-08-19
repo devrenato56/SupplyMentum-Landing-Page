@@ -1,24 +1,24 @@
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { MembersService } from './members.service';
+import { ExecutivesService } from './executives.service';
 
-@ApiTags('Miembros')
-@Controller('members')
-export class AdminMembersController {
-  constructor(private readonly membersService: MembersService) {}
+@ApiTags('Directivos')
+@Controller('executives')
+export class ExecutivesController {
+  constructor(private readonly executivesService: ExecutivesService) {}
 
   @ApiOperation({
-    summary: 'Get visible organization members',
+    summary: 'Get visible organization executives',
     description:
-      'Returns active members ordered by role hierarchy and display order.',
+      'Returns active executives ordered by role hierarchy and display order.',
   })
   @ApiResponse({
     status: 200,
-    description: 'List of visible members returned successfully.',
+    description: 'List of visible executives returned successfully.',
     schema: {
       example: [
         {
-          member_id: 1,
+          executive_id: 1,
           full_name: 'Johan Osores',
           role_id: 3,
           role: {
@@ -31,7 +31,7 @@ export class AdminMembersController {
             name: 'Capital Humano y Excelencia',
           },
           description: 'Marketing and CRM Director at SupplyMentum.',
-          image_path: 'members/johan-osores.webp',
+          image_path: 'executives/johan-osores.webp',
           linkedin_url: 'https://www.linkedin.com/in/usuario',
           is_active: true,
           sort_order: 1,
@@ -41,24 +41,24 @@ export class AdminMembersController {
   })
   @Get()
   findAll() {
-    return this.membersService.findPublicAll();
+    return this.executivesService.findPublicAll();
   }
 
   @ApiOperation({
-    summary: 'Get a visible member by ID',
+    summary: 'Get a visible executive by ID',
   })
   @ApiParam({
-    name: 'memberId',
-    description: 'Member ID',
+    name: 'executiveId',
+    description: 'Executive ID',
     type: Number,
     example: 1,
   })
   @ApiResponse({
     status: 200,
-    description: 'Member returned successfully.',
+    description: 'Executive returned successfully.',
     schema: {
       example: {
-        member_id: 1,
+        executive_id: 1,
         full_name: 'Johan Osores',
         role_id: 3,
         role: {
@@ -71,18 +71,18 @@ export class AdminMembersController {
           name: 'Capital Humano y Excelencia',
         },
         description: 'Marketing and CRM Director at SupplyMentum.',
-        image_path: 'members/johan-osores.webp',
+        image_path: 'executives/johan-osores.webp',
         linkedin_url: 'https://www.linkedin.com/in/usuario',
         is_active: true,
         sort_order: 1,
       },
     },
   })
-  @Get(':memberId')
+  @Get(':executiveId')
   findOne(
-    @Param('memberId', ParseIntPipe)
-    memberId: number,
+    @Param('executiveId', ParseIntPipe)
+    executiveId: number,
   ) {
-    return this.membersService.findPublicOne(memberId);
+    return this.executivesService.findPublicOne(executiveId);
   }
 }

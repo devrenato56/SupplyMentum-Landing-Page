@@ -19,7 +19,7 @@ The current CMS is organized into the following modules:
 
 * `areas`: manages organization areas.
 * `roles`: manages organization roles and hierarchy.
-* `members`: manages directors and organization members.
+* `executives`: manages directors and organization executives.
 * `events`: manages events, registration status, featured events, and summaries.
 * `media`: manages image uploads and deletions using Supabase Storage.
 * `application`: manages applicant submissions.
@@ -66,7 +66,7 @@ Inactive areas are kept in the database but are not returned by the public API.
 
 #### `roles`
 
-Stores organization roles independently from members so new roles can be added without changing backend code.
+Stores organization roles independently from executives so new roles can be added without changing backend code.
 
 Main fields:
 
@@ -84,13 +84,13 @@ Examples include:
 * Director
 * Subdirector
 
-#### `members`
+#### `executives`
 
-Stores organization members and their relationship with roles and areas.
+Stores organization executives and their relationship with roles and areas.
 
 Main fields:
 
-* `member_id`
+* `executive_id`
 * `full_name`
 * `role_id`
 * `area_id`
@@ -150,13 +150,13 @@ GET /api/areas/:areaId
 GET /api/events
 GET /api/events/:eventId
 
-GET /api/members
-GET /api/members/:memberId
+GET /api/executives
+GET /api/executives/:executiveId
 ```
 
 Public endpoints return only content that should be visible on the website.
 
-For example, inactive members and inactive areas are excluded.
+For example, inactive executives and inactive areas are excluded.
 
 ---
 
@@ -183,10 +183,10 @@ POST   /api/admin/roles
 PATCH  /api/admin/roles/:roleId
 DELETE /api/admin/roles/:roleId
 
-GET    /api/admin/members
-POST   /api/admin/members
-PATCH  /api/admin/members/:memberId
-DELETE /api/admin/members/:memberId
+GET    /api/admin/executives
+POST   /api/admin/executives
+PATCH  /api/admin/executives/:executiveId
+DELETE /api/admin/executives/:executiveId
 
 GET    /api/admin/events
 POST   /api/admin/events
@@ -194,7 +194,7 @@ PATCH  /api/admin/events/:eventId
 DELETE /api/admin/events/:eventId
 ```
 
-Areas, roles, and members use logical deactivation where appropriate instead of immediately deleting related historical data.
+Areas, roles, and executives use logical deactivation where appropriate instead of immediately deleting related historical data.
 
 ---
 
@@ -236,14 +236,14 @@ The bucket uses logical folders such as:
 cms-media/
 ├── areas/
 ├── events/
-├── members/
+├── executives/
 └── projects/
 ```
 
 The database stores only the object path:
 
 ```text
-members/550e8400-e29b-41d4-a716-446655440000.webp
+executives/550e8400-e29b-41d4-a716-446655440000.webp
 ```
 
 instead of storing the entire public URL.
@@ -285,7 +285,7 @@ Valid resource values are:
 ```text
 areas
 events
-members
+executives
 projects
 ```
 
@@ -295,8 +295,8 @@ Example result:
 
 ```json
 {
-  "image_path": "members/550e8400-e29b-41d4-a716-446655440000.webp",
-  "image_url": "https://.../storage/v1/object/public/cms-media/members/550e8400-e29b-41d4-a716-446655440000.webp"
+  "image_path": "executives/550e8400-e29b-41d4-a716-446655440000.webp",
+  "image_url": "https://.../storage/v1/object/public/cms-media/executives/550e8400-e29b-41d4-a716-446655440000.webp"
 }
 ```
 

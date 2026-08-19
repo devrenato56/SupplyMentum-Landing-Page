@@ -4,7 +4,7 @@ import { IsIn, IsNotEmpty, IsString } from 'class-validator';
 export const MEDIA_RESOURCES = [
   'areas',
   'events',
-  'members',
+  'executives',
   'projects',
 ] as const;
 
@@ -13,7 +13,7 @@ export type MediaResource = (typeof MEDIA_RESOURCES)[number];
 export class UploadMediaDto {
   @ApiProperty({
     description: 'Resource type the image belongs to',
-    example: 'members',
+    example: 'executives',
     enum: MEDIA_RESOURCES,
   })
   @IsString()
