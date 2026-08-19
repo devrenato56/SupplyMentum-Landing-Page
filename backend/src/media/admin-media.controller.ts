@@ -2,9 +2,11 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -95,8 +97,7 @@ export class AdminMediaController {
 
   @ApiOperation({
     summary: 'Delete an image from CMS storage',
-    description:
-      'Deletes an image stored in the multimedia content bucket.',
+    description: 'Deletes an image stored in the multimedia content bucket.',
   })
   @ApiBody({
     type: DeleteMediaDto,
@@ -118,6 +119,32 @@ export class AdminMediaController {
       },
     },
   })
+  @ApiOperation({
+    summary: 'Get the public URL of a CMS image',
+    description:
+      'Returns the public URL corresponding to an image path stored in the CMS media bucket.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Public image URL returned successfully.',
+    schema: {
+      example: {
+        image_path: 'executives/3d9d5fe5-7c4a-4d17-bfe9-242af161ef2b.webp',
+        image_url:
+          'https://xyz.supabase.co/storage/v1/object/public/cms-media/executives/3d9d5fe5-7c4a-4d17-bfe9-242af161ef2b.webp',
+      },
+    },
+  })
+  @Get('url')
+  getPublicUrl(
+    @Query('image_path')
+    imagePath: string,
+  ) {
+    return {
+      image_path: imagePath,
+      image_url: this.mediaService.getPublicUrl(imagePath),
+    };
+  }
   @Delete()
   remove(
     @Body()

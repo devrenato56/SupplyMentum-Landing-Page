@@ -1,13 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
-import FeaturedEvent from '../../components/FeaturedEvent';
-import EventCard from '../../components/EventCard';
-import SearchAndFilters, { FilterType } from '../../components/SearchAndFilters';
-import { mockEvents } from '../../data/mockEvents';
-import SmoothScroll from '../../components/ui/SmoothScroll';
-import ConstellationBackground from '../../components/convocatoria/ConstellationBackground';
-import FaqAccordion from '../../components/FaqAccordion';
+import React, { useState } from "react";
+
+import FeaturedEvent from "@/components/FeaturedEvent";
+import EventCard from "@/components/EventCard";
+import SearchAndFilters, {
+  FilterType,
+} from "@/components/SearchAndFilters";
+
+import { mockEvents } from "@/data/mockEvents";
+
+import SmoothScroll from "@/components/ui/SmoothScroll";
+import ConstellationBackground from "@/components/convocatoria/ConstellationBackground";
+import FaqAccordion from "@/components/FaqAccordion";
 
 export default function EventosPage() {
   const [filter, setFilter] = useState<FilterType>('TODOS');
@@ -16,7 +21,7 @@ export default function EventosPage() {
   // 1. Obtener el evento destacado (El más importante que es Próximo)
   // Asumimos que es el primer elemento de la lista
   const featuredEvent = mockEvents[0];
-  
+
   // Usamos todos los eventos para la grilla inferior (sin excluir el destacado)
   const remainingEvents = mockEvents;
 
@@ -53,11 +58,11 @@ export default function EventosPage() {
     if (a.status !== b.status) {
       return a.status === 'PRÓXIMO' ? -1 : 1;
     }
-    
+
     // 2. Si tienen el mismo estado, aplicamos orden por fecha
     const timeA = parseDate(a.date);
     const timeB = parseDate(b.date);
-    
+
     if (a.status === 'PRÓXIMO') {
       // Los próximos se ordenan ascendente (del más cercano a ocurrir al más lejano)
       return timeA - timeB;
@@ -78,7 +83,7 @@ export default function EventosPage() {
       <div className="absolute right-[-160px] top-[-160px] w-[560px] h-[560px] pointer-events-none z-0" style={{ background: 'radial-gradient(circle, rgba(237,28,36,.16) 0%, transparent 65%)' }}></div>
 
       <div className="w-full mx-auto relative z-10">
-        
+
         {/* Header */}
         <h4 className="text-[#ED1C24] text-xs font-bold tracking-[0.25em] mb-6 uppercase">
           Próximo Evento
@@ -95,7 +100,7 @@ export default function EventosPage() {
         </h2>
 
         {/* 2. Filtros y Buscador */}
-        <SearchAndFilters 
+        <SearchAndFilters
           currentFilter={filter}
           onFilterChange={setFilter}
           searchQuery={searchQuery}
