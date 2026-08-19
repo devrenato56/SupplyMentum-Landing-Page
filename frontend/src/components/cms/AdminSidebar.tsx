@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import {
     Boxes,
     BriefcaseBusiness,
@@ -12,11 +13,14 @@ import {
     FileUser,
     Images,
     LayoutDashboard,
+    Loader2,
     LogOut,
     Network,
     PanelLeftClose,
     X,
 } from "lucide-react";
+
+import { logoutAdmin } from "@/lib/api/auth";
 
 interface AdminSidebarProps {
     open: boolean;
@@ -94,6 +98,10 @@ export default function AdminSidebar({
     onClose,
 }: AdminSidebarProps) {
     const pathname = usePathname();
+    const router = useRouter();
+
+    const [loggingOut, setLoggingOut] = useState(false);
+    const [logoutError, setLogoutError] = useState<string | null>(null);
 
     const isActive = (href: string) => {
         if (href === "/admin") {
@@ -102,6 +110,26 @@ export default function AdminSidebar({
 
         return pathname === href || pathname.startsWith(`${href}/`);
     };
+
+    async function handleLogout() {
+        try {
+            setLoggingOut(true);
+            setLogoutError(null);
+
+            await logoutAdmin();
+
+            router.replace("/admin/login");
+            router.refresh();
+        } catch (error) {
+            setLogoutError(
+                error instanceof Error
+                    ? error.message
+                    : "No se pudo cerrar la sesión.",
+            );
+        } finally {
+            setLoggingOut(false);
+        }
+    }
 
     return (
         <>
@@ -227,6 +255,14 @@ export default function AdminSidebar({
                 </nav>
 
                 <div className="border-t border-[#22222A] p-3">
+                    {logoutError && (
+                        <div className="mb-2 border border-red-900/40 bg-red-950/20 px-3 py-2">
+                            <p className="text-[11px] leading-4 text-red-400">
+                                {logoutError}
+                            </p>
+                        </div>
+                    )}
+
                     <Link
                         href="/"
                         className="flex h-11 items-center gap-3 px-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-zinc-500 transition-colors hover:bg-white/[0.03] hover:text-white"
@@ -241,14 +277,26 @@ export default function AdminSidebar({
 
                     <button
                         type="button"
-                        className="flex h-11 w-full items-center gap-3 px-3 text-left text-[12px] font-semibold uppercase tracking-[0.08em] text-zinc-500 transition-colors hover:bg-red-950/20 hover:text-red-400"
+                        onClick={() => void handleLogout()}
+                        disabled={loggingOut}
+                        className="flex h-11 w-full items-center gap-3 px-3 text-left text-[12px] font-semibold uppercase tracking-[0.08em] text-zinc-500 transition-colors hover:bg-red-950/20 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                        <LogOut
-                            size={17}
-                            strokeWidth={1.8}
-                        />
+                        {loggingOut ? (
+                            <Loader2
+                                size={17}
+                                strokeWidth={1.8}
+                                className="animate-spin"
+                            />
+                        ) : (
+                            <LogOut
+                                size={17}
+                                strokeWidth={1.8}
+                            />
+                        )}
 
-                        Cerrar sesión
+                        {loggingOut
+                            ? "Cerrando sesión..."
+                            : "Cerrar sesión"}
                     </button>
                 </div>
             </aside>
