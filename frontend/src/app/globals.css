@@ -337,3 +337,117 @@ h3{
 }
 .panel.is-seek{ border-top-color:var(--brand-gold); }
 .panel h2{ margin-bottom:28px; font-size:clamp(24px,2.6vw,32px); }
+
+/* ─────────────────────────────────────────────────────────────
+   CMS
+───────────────────────────────────────────────────────────── */
+
+.cms-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #2b2b32 transparent;
+}
+
+.cms-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.cms-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cms-scrollbar::-webkit-scrollbar-thumb {
+  background: #2b2b32;
+}
+
+.cms-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3a3a43;
+}
+
+.cms-input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #2a2a31;
+  background: #0d0d10;
+  padding: 0 14px;
+  color: #f4f4f5;
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.cms-input::placeholder {
+  color: #52525b;
+}
+
+.cms-input:focus {
+  border-color: #ed1c24;
+  background: #101014;
+}
+
+.cms-label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #71717a;
+}
+
+.cms-button-primary {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ed1c24;
+  padding: 0 18px;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: white;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.cms-button-primary:hover {
+  background: #d9171f;
+}
+
+.cms-button-primary:active {
+  transform: scale(0.98);
+}
+
+.cms-button-secondary {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #313138;
+  background: transparent;
+  padding: 0 18px;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.cms-button-secondary:hover {
+  border-color: #52525b;
+  background: rgba(255, 255, 255, 0.02);
+  color: white;
+}

@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Archivo_Black, Archivo, Open_Sans } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Archivo_Black,
+  Archivo,
+  Open_Sans,
+} from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +18,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Tipografía de marca (Brandbook 1.0) — usada en la Home y demás secciones migradas del prototipo.
 const archivoBlack = Archivo_Black({
   variable: "--font-archivo-black",
   weight: "400",
@@ -34,9 +37,9 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Convocatoria 2026-II | SupplyMentum UNI",
+  title: "SupplyMentum UNI",
   description:
-    "Únete a SupplyMentum UNI - Comunidad universitaria líder en la gestión de la cadena de suministro. Revisa las áreas abiertas y postula ahora.",
+    "Comunidad universitaria especializada en gestión de la cadena de suministro.",
 };
 
 export default function RootLayout({
@@ -49,10 +52,8 @@ export default function RootLayout({
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable} ${archivoBlack.variable} ${archivo.variable} ${openSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#09090B] text-zinc-100 font-sans selection:bg-[#ED1C24] selection:text-white">
-        <Header />
-        <main className="flex-1 w-full">{children}</main>
-        <Footer />
+      <body className="min-h-full bg-[#070709] text-zinc-100 selection:bg-[#ED1C24] selection:text-white">
+        {children}
       </body>
     </html>
   );
