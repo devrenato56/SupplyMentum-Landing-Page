@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ProyectoData } from "@/data/proyectos";
 
 /**
@@ -7,7 +8,10 @@ import { ProyectoData } from "@/data/proyectos";
  */
 export default function RackCard({ proyecto }: { proyecto: ProyectoData }) {
   return (
-    <article className="group relative bg-[#121216] border border-zinc-800/80 overflow-hidden hover:border-[#ED1C24]/40 hover:shadow-[0_8px_32px_rgba(237,28,36,0.08)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+    <Link
+      href={`/proyectos/${proyecto.slug}`}
+      className="group relative block bg-[#121216] border border-zinc-800/80 overflow-hidden hover:border-[#ED1C24]/40 hover:shadow-[0_8px_32px_rgba(237,28,36,0.08)] hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+    >
       {/* Imagen */}
       <div className="relative h-[200px] w-full overflow-hidden bg-zinc-950">
         <Image
@@ -56,6 +60,6 @@ export default function RackCard({ proyecto }: { proyecto: ProyectoData }) {
           {proyecto.year}
         </span>
       </div>
-    </article>
+    </Link>
   );
 }

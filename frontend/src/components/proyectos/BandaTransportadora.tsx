@@ -1,50 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import ProyectoCard, { Proyecto } from "./ProyectoCard";
-
-const proyectos: Proyecto[] = [
-  {
-    id: "proj-1",
-    title: "Plataforma de Trazabilidad IoT para Vacunas",
-    category: "TECNOLOGÍA",
-    description: "Implementación de sensores IoT para el monitoreo de temperatura y humedad en tiempo real durante la distribución de vacunas termo-sensibles.",
-    year: "2025",
-    imageUrl: "/images/iot.png",
-  },
-  {
-    id: "proj-2",
-    title: "Campaña de Posicionamiento Digital & Branding",
-    category: "MARKETING",
-    description: "Rediseño completo de la identidad visual de la comunidad y estrategias de marketing de contenido para potenciar el alcance en plataformas profesionales.",
-    year: "2025",
-    imageUrl: "/images/marketing.png",
-  },
-  {
-    id: "proj-3",
-    title: "Bootcamp de Inducción & Onboarding de Talento",
-    category: "TALENTO",
-    description: "Diseño y ejecución del programa de entrenamiento intensivo para nuevos miembros de la comunidad, logrando una retención del 95% en los primeros meses.",
-    year: "2024",
-    imageUrl: "/images/talent.png",
-  },
-  {
-    id: "proj-4",
-    title: "Optimización de Inventario & Almacén para Pymes",
-    category: "CONSULTORÍA",
-    description: "Asesoría estratégica de distribución y organización de almacenes con metodología de clasificación ABC, reduciendo tiempos de despacho en un 30%.",
-    year: "2024",
-    imageUrl: "/images/warehouse.png",
-  },
-  {
-    id: "proj-5",
-    title: "Dashboard Integral de KPIs Logísticos",
-    category: "TECNOLOGÍA",
-    description: "Creación de un panel analítico interactivo con métricas clave de rendimiento (KPIs) de cadena de suministro para la toma de decisiones basada en datos.",
-    year: "2025",
-    imageUrl: "/images/iot.png",
-  },
-];
+import ProyectoCard from "./ProyectoCard";
+import { proyectos } from "@/data/proyectos";
 
 export default function BandaTransportadora() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -53,10 +11,13 @@ export default function BandaTransportadora() {
   const startX = useRef(0);
   const scrollLeft = useRef(0);
 
+  // Filtramos por proyectos destacados
+  const proyectosDestacados = proyectos.filter((p) => p.destacado);
+
   // We duplicate the list 3 times to ensure a completely seamless loop in both directions.
   const duplicarProyectos = () => {
-    if (proyectos.length === 0) return [];
-    return [...proyectos, ...proyectos, ...proyectos];
+    if (proyectosDestacados.length === 0) return [];
+    return [...proyectosDestacados, ...proyectosDestacados, ...proyectosDestacados];
   };
 
   const listaDuplicada = duplicarProyectos();
@@ -155,7 +116,7 @@ export default function BandaTransportadora() {
           <div className="flex w-max gap-6 px-4">
             {listaDuplicada.map((proyecto, index) => (
               <ProyectoCard
-                key={`${proyecto.id}-${index}`}
+                key={`${proyecto.slug}-${index}`}
                 proyecto={proyecto}
               />
             ))}

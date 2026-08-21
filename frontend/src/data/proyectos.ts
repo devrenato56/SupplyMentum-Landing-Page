@@ -131,3 +131,17 @@ export const areasProyecto: string[] = [
   "Todos",
   ...Array.from(new Set(proyectos.map((p) => p.area))),
 ];
+
+export interface ParticipanteProyecto {
+  name: string;
+  role: string;
+  img: string;
+}
+
+export const equipoProyecto: ParticipanteProyecto[] = [
+  { name: "Líder de proyecto", role: "Lead", img: "https://picsum.photos/seed/sm-pt-1/600/600" },
+  { name: "Analista 1", role: "Operaciones", img: "https://picsum.photos/seed/sm-pt-2/600/600" },
+  { name: "Analista 2", role: "Consultoría", img: "https://picsum.photos/seed/sm-pt-3/600/600" },
+  { name: "Analista 3", role: "Marketing", img: "https://picsum.photos/seed/sm-pt-4/600/600" },
+];
+
