@@ -27,6 +27,20 @@ export interface Executive {
   area?: ExecutiveArea | null;
 }
 
+export interface PublicExecutive {
+  executive_id: number;
+  full_name: string;
+  role_id: number;
+  area_id: number | null;
+  description: string | null;
+  image_path: string | null;
+  image_url: string | null;
+  linkedin_url: string | null;
+  sort_order: number;
+  role?: ExecutiveRole | null;
+  area?: ExecutiveArea | null;
+}
+
 export interface CreateExecutivePayload {
   full_name: string;
   role_id: number;
@@ -56,8 +70,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api";
 /**
  * Ejecuta una petición al backend del CMS.
  *
- * credentials: "include" permite enviar la cookie de autenticación
- * utilizada por los endpoints administrativos.
+ * credentials: "include" permite enviar la cookie
+ * de autenticación utilizada por los endpoints administrativos.
  */
 async function apiRequest<T>(
   endpoint: string,
@@ -92,12 +106,27 @@ async function apiRequest<T>(
     throw new Error(message);
   }
 
-  // Algunos endpoints podrían devolver una respuesta sin contenido.
   if (response.status === 204) {
     return undefined as T;
   }
 
   return (await response.json()) as T;
+}
+
+/**
+ * Obtiene los directivos visibles en la landing pública.
+ */
+export async function getPublicExecutives(): Promise<PublicExecutive[]> {
+  return apiRequest<PublicExecutive[]>("/executives");
+}
+
+/**
+ * Obtiene un directivo visible específico.
+ */
+export async function getPublicExecutive(
+  executiveId: number,
+): Promise<PublicExecutive> {
+  return apiRequest<PublicExecutive>(`/executives/${executiveId}`);
 }
 
 /**

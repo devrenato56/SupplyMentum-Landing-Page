@@ -476,7 +476,7 @@ export default function AreasSection({
                 turnsPerMin={3.2}
                 interactive={false}
                 camZ={6.6}
-                fallbackSrc="/assets/cubo.png"
+                fallbackSrc="/cubo.png"
                 fallbackAlt="Logo cubo"
               />
             </div>

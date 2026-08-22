@@ -9,6 +9,10 @@ import {
   getPublicArea,
 } from "@/lib/api/areas";
 
+import {
+  getPublicExecutives,
+} from "@/lib/api/executives";
+
 interface PageProps {
   params: Promise<{
     id: string;
@@ -22,7 +26,10 @@ export async function generateMetadata({
 
   const areaId = Number(id);
 
-  if (!Number.isInteger(areaId) || areaId <= 0) {
+  if (
+    !Number.isInteger(areaId) ||
+    areaId <= 0
+  ) {
     return {
       title:
         "Área no encontrada | SupplyMentum UNI",
@@ -72,6 +79,35 @@ export default async function AreaDetailPage({
     notFound();
   }
 
+  /*
+   * Obtenemos los directivos públicos y dejamos únicamente
+   * aquellos que pertenecen al área actual.
+   *
+   * El backend ya los devuelve ordenados según:
+   * 1. jerarquía del rol
+   * 2. sort_order del directivo
+   */
+  let areaExecutives = [];
+
+  try {
+    const executives =
+      await getPublicExecutives();
+
+    areaExecutives =
+      executives.filter(
+        (executive) =>
+          executive.area_id ===
+          area.area_id,
+      );
+  } catch {
+    /*
+     * Si por algún motivo falla la carga de directivos,
+     * permitimos que la información principal del área
+     * siga mostrándose.
+     */
+    areaExecutives = [];
+  }
+
   return (
     <div className="min-h-screen bg-[#0B0B0C] text-[#F5F4F2]">
       <SmoothScroll />
@@ -115,9 +151,11 @@ export default async function AreaDetailPage({
         </div>
       </section>
 
-      {/* Realizamos / Buscamos */}
+      {/* Qué realizamos / Qué buscamos */}
       <section className="section py-[60px] md:py-[100px]">
         <div className="wrap mx-auto grid max-w-[1000px] grid-cols-1 gap-[20px] lg:grid-cols-2">
+
+          {/* Qué realizamos */}
           <div className="border border-[#26262A] border-t-[3px] border-t-[#ED1C24] bg-[#131316] p-[32px] md:p-[48px_42px]">
             <h2 className="m-0 mb-[28px] text-[26px] font-extrabold md:text-[30px] font-[family-name:var(--font-archivo-black)]">
               ¿Qué realizamos?
@@ -147,6 +185,7 @@ export default async function AreaDetailPage({
             </div>
           </div>
 
+          {/* Qué buscamos */}
           <div className="border border-[#26262A] border-t-[3px] border-t-[#FFBD59] bg-[#131316] p-[32px] md:p-[48px_42px]">
             <h2 className="m-0 mb-[28px] text-[26px] font-extrabold md:text-[30px] font-[family-name:var(--font-archivo-black)]">
               ¿Qué buscamos?
@@ -177,6 +216,98 @@ export default async function AreaDetailPage({
           </div>
         </div>
       </section>
+
+      {/* Dirección del área */}
+      {areaExecutives.length > 0 && (
+        <section className="section pb-[60px] md:pb-[100px]">
+          <div className="wrap mx-auto flex max-w-[900px] flex-col items-center">
+
+            <div className="mb-[18px] text-center text-[12px] font-bold uppercase tracking-[4px] text-[#ED1C24] font-[family-name:var(--font-open-sans)]">
+              Liderazgo
+            </div>
+
+            <h2 className="m-0 mb-[36px] text-center text-[32px] font-extrabold md:mb-[48px] md:text-[38px] font-[family-name:var(--font-archivo-black)]">
+              Dirección del área
+            </h2>
+
+            <div className="mx-auto grid w-full max-w-[680px] grid-cols-1 gap-[20px] text-left md:grid-cols-2">
+              {areaExecutives.map(
+                (executive) => (
+                  <div
+                    key={
+                      executive.executive_id
+                    }
+                    className="group border border-[#26262A] bg-[#131316]"
+                  >
+                    {/* Imagen */}
+                    <div className="relative aspect-square overflow-hidden border-b-[3px] border-b-[#ED1C24]">
+                      {executive.image_url ? (
+                        <img
+                          src={
+                            executive.image_url
+                          }
+                          alt={
+                            executive.full_name
+                          }
+                          className="absolute inset-0 h-full w-full object-cover grayscale-[0.35] brightness-[0.85] transition-all duration-500 group-hover:grayscale-0 group-hover:brightness-100"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1E]">
+                          <span className="text-[48px] font-black text-[#34343A] font-[family-name:var(--font-archivo-black)]">
+                            {executive.full_name
+                              .charAt(0)
+                              .toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* LinkedIn */}
+                      {executive.linkedin_url && (
+                        <a
+                          href={
+                            executive.linkedin_url
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={`LinkedIn de ${executive.full_name}`}
+                          className="absolute right-[14px] top-[14px] flex h-[38px] w-[38px] items-center justify-center border border-[#26262A] bg-[#0B0B0C] text-[15px] font-extrabold text-[#ED1C24] transition-colors hover:bg-[#1f1f23] font-[family-name:var(--font-archivo-black)]"
+                        >
+                          in
+                        </a>
+                      )}
+                    </div>
+
+                    {/* Información */}
+                    <div className="p-[22px_24px]">
+                      <div className="text-[17px] font-bold font-[family-name:var(--font-archivo-black)]">
+                        {
+                          executive.full_name
+                        }
+                      </div>
+
+                      {executive.role && (
+                        <div className="mb-[10px] mt-[6px] text-[12px] font-semibold uppercase tracking-[1.5px] text-[#ED1C24] font-[family-name:var(--font-open-sans)]">
+                          {
+                            executive.role.name
+                          }
+                        </div>
+                      )}
+
+                      {executive.description && (
+                        <div className="text-[13px] font-light leading-[1.6] text-[#9B9AA0] font-[family-name:var(--font-open-sans)]">
+                          {
+                            executive.description
+                          }
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ),
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       <AreaCTA />
     </div>
