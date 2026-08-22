@@ -185,7 +185,7 @@ export default function AdminLoginPage() {
                                         setUsername(event.target.value)
                                     }
                                     placeholder="admin"
-                                    className="cms-input pl-11"
+                                    className="cms-input !pl-11"
                                     disabled={submitting}
                                 />
                             </div>
@@ -218,7 +218,7 @@ export default function AdminLoginPage() {
                                         setPassword(event.target.value)
                                     }
                                     placeholder="••••••••"
-                                    className="cms-input pl-11 pr-12"
+                                    className="cms-input !pl-11 !pr-12"
                                     disabled={submitting}
                                 />
 
