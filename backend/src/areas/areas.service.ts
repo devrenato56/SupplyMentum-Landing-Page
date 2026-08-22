@@ -5,7 +5,10 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+
 import { SupabaseService } from '../supabase/supabase.service';
+import { MediaService } from '../media/media.service';
+
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
 
@@ -19,7 +22,9 @@ export class AreasService {
     short_name,
     description,
     image_path,
-    sort_order
+    sort_order,
+    requirements,
+    activities
   `;
 
   private readonly adminColumns = `
@@ -31,10 +36,30 @@ export class AreasService {
     is_active,
     sort_order,
     created_at,
-    updated_at
+    updated_at,
+    requirements,
+    activities
   `;
 
-  constructor(private readonly supabaseService: SupabaseService) {}
+  constructor(
+    private readonly supabaseService: SupabaseService,
+    private readonly mediaService: MediaService,
+  ) {}
+
+  /**
+   * Agrega la URL pública de la imagen a partir de image_path.
+   *
+   * image_url no se guarda como fuente principal en la base de datos;
+   * se calcula dinámicamente utilizando Supabase Storage.
+   */
+  private withImageUrl<T extends { image_path: string | null }>(record: T) {
+    return {
+      ...record,
+      image_url: record.image_path
+        ? this.mediaService.getPublicUrl(record.image_path)
+        : null,
+    };
+  }
 
   /**
    * Retorna únicamente las áreas visibles para la landing.
@@ -59,7 +84,7 @@ export class AreasService {
       );
     }
 
-    return data;
+    return (data ?? []).map((area) => this.withImageUrl(area));
   }
 
   /**
@@ -87,7 +112,7 @@ export class AreasService {
       );
     }
 
-    return data;
+    return this.withImageUrl(data);
   }
 
   /**
@@ -113,11 +138,12 @@ export class AreasService {
       );
     }
 
-    return data;
+    return data ?? [];
   }
 
   /**
-   * Retorna cualquier área para el CMS.
+   * Retorna cualquier área para el CMS,
+   * independientemente de si está activa o inactiva.
    */
   async findAdminOne(areaId: number) {
     const supabase = this.supabaseService.getClient();
@@ -156,6 +182,10 @@ export class AreasService {
         image_path: createAreaDto.image_path ?? null,
         is_active: createAreaDto.is_active ?? true,
         sort_order: createAreaDto.sort_order ?? 0,
+
+        // JSONB
+        requirements: createAreaDto.requirements ?? [],
+        activities: createAreaDto.activities ?? [],
       })
       .select(this.adminColumns)
       .single();
@@ -205,6 +235,14 @@ export class AreasService {
       updateData.sort_order = updateAreaDto.sort_order;
     }
 
+    if (updateAreaDto.requirements !== undefined) {
+      updateData.requirements = updateAreaDto.requirements;
+    }
+
+    if (updateAreaDto.activities !== undefined) {
+      updateData.activities = updateAreaDto.activities;
+    }
+
     if (Object.keys(updateData).length === 0) {
       throw new BadRequestException(
         'Debe enviar al menos un campo para actualizar',
@@ -236,8 +274,8 @@ export class AreasService {
   /**
    * Realiza una eliminación lógica.
    *
-   * No eliminamos físicamente el área porque puede estar
-   * relacionada con postulaciones existentes.
+   * El área no se elimina físicamente porque puede estar
+   * relacionada con otros registros del sistema.
    */
   async remove(areaId: number) {
     await this.findAdminOne(areaId);

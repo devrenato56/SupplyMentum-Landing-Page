@@ -1,18 +1,24 @@
+import type { Metadata } from "next";
 import AreasSection from "@/components/areas/AreasSection";
-import React from "react";
-import { areasData } from "@/data/areasData";
 import SmoothScroll from "@/components/ui/SmoothScroll";
+import { getPublicAreas } from "@/lib/api/areas";
 
-export const metadata = {
-  title: "Áreas - SupplyMentum UNI",
-  description: "Conoce las diferentes áreas de desarrollo dentro de SupplyMentum UNI.",
+export const metadata: Metadata = {
+  title: "Áreas | SupplyMentum UNI",
+  description:
+    "Conoce las áreas de SupplyMentum UNI y descubre cómo contribuyen al desarrollo de nuestra organización.",
 };
 
-export default function AreasPage() {
+export default async function AreasPage() {
+  const areas = await getPublicAreas();
+
   return (
     <main>
       <SmoothScroll />
-      <AreasSection initialAreas={areasData} />
+
+      <AreasSection
+        initialAreas={areas}
+      />
     </main>
   );
 }

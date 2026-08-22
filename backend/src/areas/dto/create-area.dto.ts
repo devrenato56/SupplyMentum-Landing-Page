@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import {
+  IsArray,
   IsBoolean,
   IsInt,
   IsNotEmpty,
@@ -44,7 +45,8 @@ export class CreateAreaDto {
   readonly description?: string;
 
   @ApiPropertyOptional({
-    description: 'Path of the image associated with the area in Supabase Storage',
+    description:
+      'Path of the image associated with the area in Supabase Storage',
     example: 'areas/capital-humano.webp',
   })
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
@@ -52,6 +54,37 @@ export class CreateAreaDto {
   @IsString()
   @IsNotEmpty()
   readonly image_path?: string;
+
+  @ApiPropertyOptional({
+    description: 'List of activities carried out by the area',
+    example: [
+      'Organización de eventos',
+      'Desarrollo de proyectos',
+      'Capacitaciones',
+    ],
+    type: [String],
+    default: [],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  readonly activities?: string[];
+
+  @ApiPropertyOptional({
+    description:
+      'List of characteristics or skills sought in members of the area',
+    example: [
+      'Trabajo en equipo',
+      'Responsabilidad',
+      'Interés por supply chain',
+    ],
+    type: [String],
+    default: [],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  readonly requirements?: string[];
 
   @ApiPropertyOptional({
     description: 'Determines whether the area is visible on the landing page',

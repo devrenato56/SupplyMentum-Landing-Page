@@ -4,17 +4,27 @@ export interface Area {
   short_name: string | null;
   description: string | null;
   image_path: string | null;
+
+  activities: string[];
+  requirements: string[];
+
   is_active: boolean;
   sort_order: number;
+
   created_at?: string;
   updated_at?: string;
 }
 
 export interface CreateAreaPayload {
   name: string;
+
   short_name?: string | null;
   description?: string | null;
   image_path?: string | null;
+
+  activities?: string[];
+  requirements?: string[];
+
   is_active?: boolean;
   sort_order?: number;
 }
@@ -24,6 +34,21 @@ export type UpdateAreaPayload = Partial<CreateAreaPayload>;
 export interface RemoveAreaResponse {
   message?: string;
   area?: Area;
+}
+
+export interface PublicArea {
+  area_id: number;
+  name: string;
+  short_name: string | null;
+  description: string | null;
+  image_path: string | null;
+
+  image_url: string | null;
+
+  activities: string[];
+  requirements: string[];
+
+  sort_order: number;
 }
 
 interface ApiErrorResponse {
@@ -72,6 +97,20 @@ async function apiRequest<T>(
   }
 
   return (await response.json()) as T;
+}
+
+/**
+ * Obtiene las áreas activas para la landing pública.
+ */
+export async function getPublicAreas(): Promise<PublicArea[]> {
+  return apiRequest<PublicArea[]>("/areas");
+}
+
+/**
+ * Obtiene un área activa específica por ID.
+ */
+export async function getPublicArea(areaId: number): Promise<PublicArea> {
+  return apiRequest<PublicArea>(`/areas/${areaId}`);
 }
 
 /**

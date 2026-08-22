@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { Loader2, Save, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+
 import ImageUploader from "@/components/cms/media/ImageUploader";
 
 import {
@@ -22,6 +23,10 @@ interface AreaFormState {
     short_name: string;
     description: string;
     image_path: string;
+
+    activities: string;
+    requirements: string;
+
     is_active: boolean;
     sort_order: string;
 }
@@ -37,6 +42,13 @@ export default function AreaForm({
         short_name: initialData?.short_name ?? "",
         description: initialData?.description ?? "",
         image_path: initialData?.image_path ?? "",
+
+        activities:
+            initialData?.activities?.join("\n") ?? "",
+
+        requirements:
+            initialData?.requirements?.join("\n") ?? "",
+
         is_active: initialData?.is_active ?? true,
         sort_order: String(initialData?.sort_order ?? 0),
     });
@@ -52,6 +64,13 @@ export default function AreaForm({
             ...current,
             [field]: value,
         }));
+    }
+
+    function linesToArray(value: string): string[] {
+        return value
+            .split("\n")
+            .map((item) => item.trim())
+            .filter(Boolean);
     }
 
     function validateForm(): string | null {
@@ -71,10 +90,7 @@ export default function AreaForm({
 
         const sortOrder = Number(form.sort_order);
 
-        if (
-            !Number.isInteger(sortOrder) ||
-            sortOrder < 0
-        ) {
+        if (!Number.isInteger(sortOrder) || sortOrder < 0) {
             return "El orden debe ser un número entero mayor o igual a 0.";
         }
 
@@ -84,11 +100,27 @@ export default function AreaForm({
     function buildPayload(): CreateAreaPayload {
         return {
             name: form.name.trim(),
-            short_name: form.short_name.trim() || null,
-            description: form.description.trim() || null,
-            image_path: form.image_path.trim() || null,
-            is_active: form.is_active,
-            sort_order: Number(form.sort_order),
+
+            short_name:
+                form.short_name.trim() || null,
+
+            description:
+                form.description.trim() || null,
+
+            image_path:
+                form.image_path.trim() || null,
+
+            activities:
+                linesToArray(form.activities),
+
+            requirements:
+                linesToArray(form.requirements),
+
+            is_active:
+                form.is_active,
+
+            sort_order:
+                Number(form.sort_order),
         };
     }
 
@@ -279,6 +311,80 @@ export default function AreaForm({
             <section className="border border-[#22222A] bg-[#111115]">
                 <div className="border-b border-[#22222A] px-5 py-4 sm:px-6">
                     <p className="font-[family-name:var(--font-archivo)] text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-600">
+                        Contenido
+                    </p>
+
+                    <h2 className="mt-1 text-base font-semibold text-zinc-200">
+                        Información pública
+                    </h2>
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 p-5 sm:p-6 lg:grid-cols-2">
+                    <div>
+                        <label
+                            htmlFor="activities"
+                            className="cms-label"
+                        >
+                            Qué realizamos
+                        </label>
+
+                        <textarea
+                            id="activities"
+                            value={form.activities}
+                            onChange={(event) =>
+                                updateField(
+                                    "activities",
+                                    event.target.value,
+                                )
+                            }
+                            rows={8}
+                            className="cms-input min-h-[190px] resize-y py-3"
+                            placeholder={`Organización de eventos
+Desarrollo de proyectos
+Capacitaciones`}
+                            disabled={submitting}
+                        />
+
+                        <p className="mt-2 text-[11px] leading-5 text-zinc-700">
+                            Escribe una actividad por línea.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor="requirements"
+                            className="cms-label"
+                        >
+                            Qué buscamos
+                        </label>
+
+                        <textarea
+                            id="requirements"
+                            value={form.requirements}
+                            onChange={(event) =>
+                                updateField(
+                                    "requirements",
+                                    event.target.value,
+                                )
+                            }
+                            rows={8}
+                            className="cms-input min-h-[190px] resize-y py-3"
+                            placeholder={`Trabajo en equipo
+Responsabilidad
+Interés por supply chain`}
+                            disabled={submitting}
+                        />
+
+                        <p className="mt-2 text-[11px] leading-5 text-zinc-700">
+                            Escribe una característica o requisito por línea.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className="border border-[#22222A] bg-[#111115]">
+                <div className="border-b border-[#22222A] px-5 py-4 sm:px-6">
+                    <p className="font-[family-name:var(--font-archivo)] text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-600">
                         Multimedia
                     </p>
 
@@ -290,7 +396,9 @@ export default function AreaForm({
                 <div className="p-5 sm:p-6">
                     <ImageUploader
                         resource="areas"
-                        value={form.image_path || null}
+                        value={
+                            form.image_path || null
+                        }
                         onChange={(imagePath) =>
                             updateField(
                                 "image_path",
@@ -346,7 +454,9 @@ export default function AreaForm({
                 <button
                     type="button"
                     onClick={() =>
-                        router.push("/admin/areas")
+                        router.push(
+                            "/admin/areas",
+                        )
                     }
                     disabled={submitting}
                     className="cms-button-secondary"
@@ -371,6 +481,7 @@ export default function AreaForm({
                     ) : (
                         <>
                             <Save size={15} />
+
                             {mode === "create"
                                 ? "Crear área"
                                 : "Guardar cambios"}
