@@ -5,7 +5,10 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+
 import { SupabaseService } from '../supabase/supabase.service';
+import { MediaService } from '../media/media.service';
+
 import { CreateExecutiveDto } from './dto/create-executive.dto';
 import { UpdateExecutiveDto } from './dto/update-executive.dto';
 
@@ -89,7 +92,22 @@ export class ExecutivesService {
     )
   `;
 
-  constructor(private readonly supabaseService: SupabaseService) {}
+  constructor(
+    private readonly supabaseService: SupabaseService,
+    private readonly mediaService: MediaService,
+  ) {}
+
+  /**
+   * Agrega la URL pública de la imagen a partir de image_path.
+   */
+  private withImageUrl<T extends { image_path: string | null }>(record: T) {
+    return {
+      ...record,
+      image_url: record.image_path
+        ? this.mediaService.getPublicUrl(record.image_path)
+        : null,
+    };
+  }
 
   /**
    * Ordena los directivos según la jerarquía del rol
@@ -194,13 +212,15 @@ export class ExecutivesService {
       (executive) => executive.role && executive.role.is_active,
     );
 
-    return this.sortExecutives(visibleExecutives);
+    const sortedExecutives = this.sortExecutives(visibleExecutives);
+
+    return sortedExecutives.map((executive) => this.withImageUrl(executive));
   }
 
   /**
    * Obtiene un directivo activo para la landing.
    */
-  async findPublicOne(executiveId: number): Promise<ExecutiveRecord> {
+  async findPublicOne(executiveId: number) {
     const supabase = this.supabaseService.getClient();
 
     const { data, error } = await supabase
@@ -230,7 +250,7 @@ export class ExecutivesService {
       );
     }
 
-    return executive;
+    return this.withImageUrl(executive);
   }
 
   /**
@@ -274,7 +294,9 @@ export class ExecutivesService {
     }
 
     if (!data) {
-      throw new NotFoundException(`No existe un directivo con el ID ${executiveId}`);
+      throw new NotFoundException(
+        `No existe un directivo con el ID ${executiveId}`,
+      );
     }
 
     return data as unknown as ExecutiveRecord;
@@ -299,12 +321,19 @@ export class ExecutivesService {
       .from(this.tableName)
       .insert({
         full_name: createExecutiveDto.full_name,
+
         role_id: createExecutiveDto.role_id,
+
         area_id: createExecutiveDto.area_id ?? null,
+
         description: createExecutiveDto.description ?? null,
+
         image_path: createExecutiveDto.image_path ?? null,
+
         linkedin_url: createExecutiveDto.linkedin_url ?? null,
+
         is_active: createExecutiveDto.is_active ?? true,
+
         sort_order: createExecutiveDto.sort_order ?? 0,
       })
       .select(this.adminColumns)
